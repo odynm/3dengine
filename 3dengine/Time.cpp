@@ -10,6 +10,6 @@ void Time::StartFrame()
 
 void Time::EndFrame()
 {
-    // TODO: use a more reliable timer approach
+    // TODO: use a more reliable timer approach then CLOCKS_PER_SEC
     delta = (clock() - clockTime) / (double)CLOCKS_PER_SEC;
 }
