@@ -21,7 +21,6 @@ int main()
         }
 
         Time::EndFrame();
-        printf("%f", Time::delta);
     }
 
     Window::DestroyWindow();

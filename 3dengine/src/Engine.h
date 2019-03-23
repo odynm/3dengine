@@ -17,6 +17,8 @@ typedef uint8_t byte;
 
 class Engine
 {
+private:
+    Engine() {}
 };
 
 #endif

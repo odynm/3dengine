@@ -10,6 +10,7 @@ public:
     static void StartFrame();
     static void EndFrame();
 private:
+    Time() { }
     static clock_t clockTime;
 };
 

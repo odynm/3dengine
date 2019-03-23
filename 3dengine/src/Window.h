@@ -12,7 +12,7 @@ public:
     static void DestroyWindow();
 
 private:
-    Window(){ } //This classe should not be instanced
+    Window() { }
     static GLFWwindow* window;
 };
 
