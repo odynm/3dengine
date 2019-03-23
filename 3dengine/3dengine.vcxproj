@@ -131,15 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="Time.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
