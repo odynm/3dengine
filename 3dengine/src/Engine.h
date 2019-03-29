@@ -12,11 +12,16 @@ typedef int8_t int8;
 typedef uint8_t uint8;
 typedef uint8_t byte;
 
+#include "SystemTypes/String.h"
+
 #include "Window.h"
 #include "Time.h"
+#include "Input.h"
 
 class Engine
 {
+public:
+    void Tick();
 private:
     Engine() {}
 };

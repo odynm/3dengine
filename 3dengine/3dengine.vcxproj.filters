@@ -1,36 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Engine">
-      <UniqueIdentifier>{ce9a4425-2467-47df-b87a-e0e21f8c18b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Core">
-      <UniqueIdentifier>{c2a8be51-b0a2-40f7-8a67-0eec884f24aa}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Engine\Core</Filter>
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\SystemTypes\String.cpp">
+      <Filter>SystemTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h">
-      <Filter>Engine\Core</Filter>
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\Time.h" />
+    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\SystemTypes\String.h">
+      <Filter>SystemTypes</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="SystemTypes">
+      <UniqueIdentifier>{e28ee94e-6004-4531-9504-06b8c5d0f3f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

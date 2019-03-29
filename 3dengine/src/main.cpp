@@ -8,6 +8,9 @@ int main()
 {
     Window::CreateWindow(WIDTH, HEIGHT, TITLE);
 
+    String str = String("Teste");
+    printf(str);
+
     while (!Window::HasRequestedQuit())
     {
         Time::StartFrame();
