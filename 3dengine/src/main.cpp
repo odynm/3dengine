@@ -13,17 +13,7 @@ int main()
 
     while (!Window::HasRequestedQuit())
     {
-        Time::StartFrame();
-
-        Window::PollEvents();
-
-        int var = 0;
-        for (int i = 0; i < 900000; i++)
-        {
-            var++;
-        }
-
-        Time::EndFrame();
+        Engine::Tick();
     }
 
     Window::DestroyWindow();

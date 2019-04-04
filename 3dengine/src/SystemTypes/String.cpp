@@ -14,7 +14,7 @@ String::String(char const c[])
 {
     length = 0;
     while (c[length]) { length++; }
-    text = new char[length+1];
+    text = new char[length + 1];
     text[length] = '\0';
     memcpy(text, c, length);
 }

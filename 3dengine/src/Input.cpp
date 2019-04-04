@@ -1,21 +1,17 @@
 #include "Input.h"
 
-bool Input::GetKeyDown(int keycode)
+void
+Input::Init()
 {
-    //return glfwGetKey(window, keycode) == GLFW_PRESS;
+    glfwSetKeyCallback(Window::window, InputCallback);
 }
 
-bool Input::GetKeyDown(string keyName)
+void
+Input::SetKeyAction(int keycode, KeyActionFunc* func)
 {
-    return false;
 }
 
-bool Input::GetKeyUp(int keycode)
+void
+Input::InputCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods)
 {
-    return false;
-}
-
-bool Input::GetKeyUp(string keyName)
-{
-    return false;
 }

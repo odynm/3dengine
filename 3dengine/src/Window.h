@@ -6,6 +6,8 @@
 class Window
 {
 public:
+    static GLFWwindow* window;
+
     static void CreateWindow(int width, int height, const char* title);
     static bool HasRequestedQuit();
     static void PollEvents();
@@ -13,7 +15,6 @@ public:
 
 private:
     Window() { }
-    static GLFWwindow* window;
 };
 
 #endif

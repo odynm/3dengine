@@ -1,6 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#define MAX_ACTIONS 30
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -21,7 +23,8 @@ typedef uint8_t byte;
 class Engine
 {
 public:
-    void Tick();
+    static void Init();
+    static void Tick();
 private:
     Engine() {}
 };

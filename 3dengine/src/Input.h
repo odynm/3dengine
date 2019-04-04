@@ -1,23 +1,28 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-/*
- I've decided to use polling. An event approach could be nice.
-*/
-
 #include "SystemTypes/String.h"
 
+#include "Engine.h"
 #include "Window.h"
+
+typedef void KeyActionFunc(int state);
+
+typedef struct {
+    int keycode;
+    KeyActionFunc* func;
+} InputActions;
 
 class Input
 {
 public:
-    bool GetKeyDown(int keycode);
-    bool GetKeyDown(string keyName);
-    bool GetKeyUp(int keycode);
-    bool GetKeyUp(string keyName);
+    static void Init();
+    static void SetKeyAction(int keycode, KeyActionFunc* func);
 private:
     Input() {};
+    static void InputCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods);
+
+    static InputActions actions[MAX_ACTIONS];
 };
 
 #endif
