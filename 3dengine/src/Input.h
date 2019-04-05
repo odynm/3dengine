@@ -22,7 +22,8 @@ private:
     Input() {};
     static void InputCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods);
 
-    static InputActions actions[MAX_ACTIONS];
+    static int numAddedActions;
+    static InputActions actions[MAX_INPUT_ACTIONS];
 };
 
 #endif

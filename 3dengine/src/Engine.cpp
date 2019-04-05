@@ -10,6 +10,7 @@ Engine::Init()
 void Engine::Tick()
 {
     Window::PollEvents();
+    Renderer::Draw();
 
     Time::EndFrame();
     Time::StartFrame();

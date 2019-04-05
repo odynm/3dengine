@@ -1,7 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#define MAX_ACTIONS 30
+#define MAX_INPUT_ACTIONS 30
 
 #include <stdint.h>
 #include <stdio.h>
@@ -19,6 +19,7 @@ typedef uint8_t byte;
 #include "Window.h"
 #include "Time.h"
 #include "Input.h"
+#include "Renderer.h"
 
 class Engine
 {

@@ -9,6 +9,10 @@
     <ClCompile Include="src\SystemTypes\String.cpp">
       <Filter>SystemTypes</Filter>
     </ClCompile>
+    <ClCompile Include="src\glad\glad.c">
+      <Filter>glad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -18,10 +22,14 @@
     <ClInclude Include="src\SystemTypes\String.h">
       <Filter>SystemTypes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">
       <UniqueIdentifier>{e28ee94e-6004-4531-9504-06b8c5d0f3f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glad">
+      <UniqueIdentifier>{68dc3954-2bfc-4c17-b8a2-8cef995911a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

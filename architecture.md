@@ -6,7 +6,7 @@ The game loop is handled by the user of the API. A simple while should suffice. 
 Main systems who made the core of the engine are all singletons / static. The engine user can use those through importing *Engine.h*, which should bring everything needed with it - pretty much like Unreal used to do with *Unreal.h*. 
 
 ## Entities and components
-The components make a differente part of the engine and are not static. Those can be instanced and used through the code, and probably need to be imported separately together with the system they eventually use.
+The components make a different part of the engine and are not static. Those can be instanced and used through the code, and probably need to be imported separately together with the system they'll eventually use.
 
-## Lua API
-Planned.
+## Philosophy
+This is intended to be a graphics api that could scale. For simplicity, it will start as classical OOP design instead of a data-driven that I would like.

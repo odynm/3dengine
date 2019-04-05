@@ -1,7 +1,9 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <glfw\glfw3.h>
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
+#undef CreateWindow // 'Someone' defined this
 
 class Window
 {
@@ -15,6 +17,7 @@ public:
 
 private:
     Window() { }
+    static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
 };
 
 #endif
