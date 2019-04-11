@@ -3,23 +3,16 @@
 
 #define MAX_INPUT_ACTIONS 30
 
-#include <stdint.h>
 #include <stdio.h>
 
-typedef int64_t int64;
-typedef uint64_t uint64;
-typedef int16_t int16;
-typedef uint16_t uint16;
-typedef int8_t int8;
-typedef uint8_t uint8;
-typedef uint8_t byte;
-
+#include "SystemTypes/Typedefs.h"
 #include "SystemTypes/String.h"
 
+#include "FileSystem.h"
 #include "Window.h"
 #include "Time.h"
 #include "Input.h"
-#include "Renderer.h"
+#include "Graphics/Renderer.h"
 
 class Engine
 {

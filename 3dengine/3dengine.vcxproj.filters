@@ -12,7 +12,10 @@
     <ClCompile Include="src\glad\glad.c">
       <Filter>glad</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\FileSystem.cpp" />
+    <ClCompile Include="src\Graphics\Renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -22,7 +25,13 @@
     <ClInclude Include="src\SystemTypes\String.h">
       <Filter>SystemTypes</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\FileSystem.h" />
+    <ClInclude Include="src\Graphics\Renderer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SystemTypes\Typedefs.h">
+      <Filter>SystemTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">
@@ -31,5 +40,16 @@
     <Filter Include="glad">
       <UniqueIdentifier>{68dc3954-2bfc-4c17-b8a2-8cef995911a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{b2793b24-0b8a-4f94-aa9f-9b8bdc275d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders">
+      <UniqueIdentifier>{1a61890c-e2a2-43a3-8d3d-e49444266630}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Graphics\Shaders\simple.vs">
+      <Filter>Graphics\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

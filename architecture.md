@@ -10,3 +10,6 @@ The components make a different part of the engine and are not static. Those can
 
 ## Philosophy
 This is intended to be a graphics api that could scale. For simplicity, it will start as classical OOP design instead of a data-driven that I would like.
+
+## Lib
+Std lib will be used extensively.
