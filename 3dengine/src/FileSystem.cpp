@@ -4,13 +4,13 @@ String*
 FileSystem::ReadContent(const char* path)
 {
     uint64 fileSize = GetFileSize(path);
-    char* buffer = (char*)malloc(fileSize);
+    char* buffer = (char*)calloc(fileSize, 1);
 
     FILE* file = fopen(path, "r");
     fread(buffer, 1, fileSize, file);
     fclose(file);
 
-    return new String(buffer);
+    return String::NoAllocString(buffer);
 }
 
 uint64

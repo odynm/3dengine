@@ -48,7 +48,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Graphics\Shaders\simple.vs">
+    <None Include="src\Graphics\Shaders\simple.frag">
+      <Filter>Graphics\Shaders</Filter>
+    </None>
+    <None Include="src\Graphics\Shaders\simple.vertex">
       <Filter>Graphics\Shaders</Filter>
     </None>
   </ItemGroup>

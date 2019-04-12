@@ -18,9 +18,14 @@ typedef struct String {
     char* text;
 
 public:
+    String() {}
     String(char const[]);
     String(char*);
     ~String();
+
+    /// Create a string but not allocates a array - it uses the same
+    static String* NoAllocString(char* c);
+
     operator char*() const { return text; }
 } String;
 

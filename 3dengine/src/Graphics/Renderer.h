@@ -4,7 +4,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "../Engine.h"
+#include "../SystemTypes/Typedefs.h"
+#include "../SystemTypes/String.h"
+#include "../FileSystem.h"
 #include "../Window.h"
 
 class Renderer
@@ -15,7 +17,9 @@ public:
     static void Draw();
 private:
     Renderer() { }
-    static uint vertexBufferObject;
+    static uint VBO;
+    static uint VAO;
+    static uint shaderProgram;
 };
 
 #endif

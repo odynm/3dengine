@@ -23,3 +23,14 @@ String::~String()
 {
     free(text);
 }
+
+String* 
+String::NoAllocString(char* c)
+{
+    String* s = new String();
+    s->length = 0;
+    while (c[s->length]) { s->length++; }
+    s->text = c;
+
+    return s;
+}

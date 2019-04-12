@@ -5,6 +5,7 @@ Engine::Init()
 {
     Input::Init();
     Time::StartFrame();
+    Renderer::Init();
 }
 
 void Engine::Tick()
