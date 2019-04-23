@@ -28,10 +28,10 @@ Renderer::Test(float const vertexData[])
 
     // SHADER CRAP
     String* vShaderSource = FileSystem::ReadContent
-        ("Shaders\\simple.vertex");
+        ("src/Graphics/Shaders/simple.vertex");
 
     String* fShaderSource = FileSystem::ReadContent
-        ("Shaders\\simple.frag");
+        ("src/Graphics/Shaders/simple.frag");
 
     int success;
     char errorLog[512];
