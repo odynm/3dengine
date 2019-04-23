@@ -18,7 +18,8 @@ public:
     static String* ReadContent(const char* path);
 private:
     FileSystem() {};
-    static uint64 GetFileSize(const char* path);
+    static uint64 GetFileSize(FILE* file);
+	static FILE * OpenFile(const char* path, const char* mode);
 };
 
 #endif

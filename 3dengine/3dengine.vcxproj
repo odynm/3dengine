@@ -97,6 +97,13 @@
     <Link>
       <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>xcopy $(ProjectDir)src\Graphics\Shaders $(OutDir)Shaders\ /Y</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
