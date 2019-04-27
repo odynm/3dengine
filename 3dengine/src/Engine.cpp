@@ -3,6 +3,7 @@
 void
 Engine::Init()
 {
+    Log::Init();
     Input::Init();
     Time::StartFrame();
     Renderer::Init();

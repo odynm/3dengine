@@ -9,10 +9,11 @@
 #include "SystemTypes/String.h"
 
 #include "FileSystem.h"
-#include "Window.h"
-#include "Time.h"
-#include "Input.h"
 #include "Graphics/Renderer.h"
+#include "Input.h"
+#include "Log.h"
+#include "Time.h"
+#include "Window.h"
 
 class Engine
 {

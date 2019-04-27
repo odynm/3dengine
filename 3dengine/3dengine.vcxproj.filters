@@ -16,6 +16,7 @@
     <ClCompile Include="src\Graphics\Renderer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="src\SystemTypes\Typedefs.h">
       <Filter>SystemTypes</Filter>
     </ClInclude>
+    <ClInclude Include="src\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">

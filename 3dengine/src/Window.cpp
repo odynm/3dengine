@@ -8,6 +8,8 @@ Window::CreateWindow(int width, int height, const char * title)
 {
     glfwInit();
 
+    glfwSetErrorCallback(Log::GlfwErrorHandling);
+
     // Init glad and glfw context
     // This could be done on the rendering, but
     // I ultimately decided to leave here
