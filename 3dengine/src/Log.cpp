@@ -3,13 +3,13 @@
 char* Log::logBuffer;
 
 void
-Log::Init() 
+Log::Init()
 {
-    logBuffer = new char[1024];
+	logBuffer = (char*)Memory::AllocFixed(1024);
 }
 
-void 
+void
 Log::GlfwErrorHandling(int error, const char* description)
 {
-    printf("GLFW ERROR: %s\n", description);
+	printf("GLFW ERROR: %s\n", description);
 }

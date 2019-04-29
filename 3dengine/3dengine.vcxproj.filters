@@ -17,6 +17,7 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\Memory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -34,6 +35,7 @@
       <Filter>SystemTypes</Filter>
     </ClInclude>
     <ClInclude Include="src\Log.h" />
+    <ClInclude Include="src\Memory.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">

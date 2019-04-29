@@ -8,6 +8,7 @@
 #include "SystemTypes/Typedefs.h"
 #include "SystemTypes/String.h"
 
+#include "Memory.h"
 #include "FileSystem.h"
 #include "Graphics/Renderer.h"
 #include "Input.h"
@@ -18,10 +19,10 @@
 class Engine
 {
 public:
-    static void Init();
-    static void Tick();
+	static void Init();
+	static void Tick();
 private:
-    Engine() {}
+	Engine() {}
 };
 
 #endif

@@ -9,24 +9,27 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../Memory.h"
+
 // Basic string - char aray
 typedef char* string;
 
 // String with size tracking
 typedef struct String {
-    int length;
-    char* text;
+	int length;
+	char* text;
 
 public:
-    String() {}
-    String(char const[]);
-    String(char*);
-    ~String();
+	String() {}
+	String(char const[]);
+	String(char*);
+	~String();
 
-    /// Create a string but not allocates a array - it uses the same
-    static String* NoAllocString(char* c);
+	/// Create a string but not allocates a array - it uses the same
+	/// Despite the name, an allocation is indeed made for the string struct
+	static String* NoAllocString(char* c);
 
-    operator char*() const { return text; }
+	operator char*() const { return text; }
 } String;
 
 #endif

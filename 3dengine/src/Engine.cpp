@@ -3,17 +3,18 @@
 void
 Engine::Init()
 {
-    Log::Init();
-    Input::Init();
-    Time::StartFrame();
-    Renderer::Init();
+	Log::Init();
+	Input::Init();
+	Time::StartFrame();
+	Renderer::Init();
 }
 
-void Engine::Tick()
+void
+Engine::Tick()
 {
-    Window::PollEvents();
-    Renderer::Draw();
+	Window::PollEvents();
+	Renderer::Draw();
 
-    Time::EndFrame();
-    Time::StartFrame();
+	Time::EndFrame();
+	Time::StartFrame();
 }

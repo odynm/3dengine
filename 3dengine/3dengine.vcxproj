@@ -142,6 +142,7 @@
     <ClInclude Include="src\Graphics\Renderer.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Log.h" />
+    <ClInclude Include="src\Memory.h" />
     <ClInclude Include="src\SystemTypes\String.h" />
     <ClInclude Include="src\SystemTypes\Typedefs.h" />
     <ClInclude Include="src\Time.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Memory.cpp" />
     <ClCompile Include="src\SystemTypes\String.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\Window.cpp" />
