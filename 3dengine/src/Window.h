@@ -3,23 +3,18 @@
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+
+#include "SystemTypes/Typedefs.h"
+
 #undef CreateWindow // 'Someone' defined this
 
-class Window
-{
-public:
-    static GLFWwindow* window;
+static GLFWwindow* window;
 
-    static void CreateWindow(int width, int height, const char* title);
-    static bool HasRequestedQuit();
-    static void PollEvents();
-    static void DestroyWindow();
+void WND_CreateWindow(int width, int height, const char* title);
+bool WND_HasRequestedQuit();
+void WND_PollEvents();
+void WND_DestroyWindow();
 
-private:
-    Window() { }
-    static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
-
-    static void error_callback(int error, const char* description);
-};
+internal void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
 
 #endif

@@ -4,16 +4,9 @@
 #include <stdio.h>
 
 #include "Memory.h"
+#include "SystemTypes/Typedefs.h"
 
-class Log
-{
-public:
-	static char* logBuffer;
-
-	static void Init();
-	static void GlfwErrorHandling(int error, const char* description);
-private:
-	Log() {};
-};
+void LOG_Init();
+void LOG_GlfwErrorHandling(int error, const char* description);
 
 #endif

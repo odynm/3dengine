@@ -1,7 +1,5 @@
 #include "Engine.h"
 
-#include <Windows.h>
-
 #define WIDTH 800
 #define HEIGHT 600
 #define TITLE "3D ENGINE"
@@ -19,16 +17,16 @@ void callback(int state)
 
 int main()
 {
-	Window::CreateWindow(WIDTH, HEIGHT, TITLE);
+	WND_CreateWindow(WIDTH, HEIGHT, TITLE);
 
-	Input::SetKeyAction(GLFW_KEY_W, callback);
+	INP_SetKeyAction(GLFW_KEY_W, callback);
 
-	Renderer::Test(vertices);
+	REN_Test(vertices);
 
-	while (!Window::HasRequestedQuit())
+	while (!WND_HasRequestedQuit())
 	{
-		Engine::Tick();
+		MAIN_Tick();
 	}
 
-	Window::DestroyWindow();
+	WND_DestroyWindow();
 }

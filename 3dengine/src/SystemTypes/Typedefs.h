@@ -8,3 +8,5 @@ typedef int8_t int8;
 typedef uint8_t uint8;
 typedef uint8_t byte;
 typedef uint32_t uint;
+
+#define internal static

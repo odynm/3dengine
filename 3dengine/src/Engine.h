@@ -16,13 +16,7 @@
 #include "Time.h"
 #include "Window.h"
 
-class Engine
-{
-public:
-	static void Init();
-	static void Tick();
-private:
-	Engine() {}
-};
+void MAIN_Init();
+void MAIN_Tick();
 
 #endif

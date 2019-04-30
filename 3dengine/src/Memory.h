@@ -8,13 +8,10 @@
 
 #include <stdlib.h>
 
-class Memory
-{
-public:
-	static void* Alloc(int size);
-	static void* AllocFixed(int size);
-	static void Release(void* address);
-private:
-};
+#include "SystemTypes/Typedefs.h"
+
+void* MEM_Alloc(uint64 size);
+void* MEM_AllocFixed(uint64 size);
+void MEM_Release(void* address);
 
 #endif

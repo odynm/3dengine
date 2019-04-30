@@ -9,17 +9,12 @@
 #include "../FileSystem.h"
 #include "../Window.h"
 
-class Renderer
-{
-public:
-    static void Init();
-    static void Test(float const vertexData[]);
-    static void Draw();
-private:
-    Renderer() { }
-    static uint VBO;
-    static uint VAO;
-    static uint shaderProgram;
-};
+void REN_Init();
+void REN_Test(float const vertexData[]);
+void REN_Draw();
+
+internal uint VBO;
+internal uint VAO;
+internal uint shaderProgram;
 
 #endif

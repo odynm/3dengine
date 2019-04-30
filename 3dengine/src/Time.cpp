@@ -1,15 +1,16 @@
 #include "Time.h"
 
-double Time::delta;
-clock_t Time::clockTime;
+double delta;
 
-void Time::StartFrame()
+void
+TIME_StartFrame()
 {
-    clockTime = clock();
+	clockTime = clock();
 }
 
-void Time::EndFrame()
+void
+TIME_EndFrame()
 {
-    // TODO: use a more reliable timer approach then CLOCKS_PER_SEC
-    delta = (clock() - clockTime) / (double)CLOCKS_PER_SEC;
+	// TODO: use a more reliable timer approach then CLOCKS_PER_SEC
+	delta = (clock() - clockTime) / (double)CLOCKS_PER_SEC;
 }

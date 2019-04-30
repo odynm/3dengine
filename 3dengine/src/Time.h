@@ -3,15 +3,13 @@
 
 #include <time.h>
 
-class Time
-{
-public:
-    static double delta;
-    static void StartFrame();
-    static void EndFrame();
-private:
-    Time() { }
-    static clock_t clockTime;
-};
+#include "SystemTypes/Typedefs.h"
+
+extern double delta;
+
+void TIME_StartFrame();
+void TIME_EndFrame();
+
+internal clock_t clockTime;
 
 #endif

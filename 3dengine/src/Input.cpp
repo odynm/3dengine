@@ -1,16 +1,13 @@
 #include "Input.h"
 
-InputActions Input::actions[MAX_INPUT_ACTIONS];
-int Input::numAddedActions = 0;
-
 void
-Input::Init()
+INP_Init()
 {
-    glfwSetKeyCallback(Window::window, InputCallback);
+    glfwSetKeyCallback(window, InputCallback);
 }
 
 void
-Input::SetKeyAction(int keycode, KeyActionFunc* func)
+INP_SetKeyAction(int keycode, KeyActionFunc* func)
 {
     InputActions action = {
         keycode = keycode,
@@ -22,7 +19,7 @@ Input::SetKeyAction(int keycode, KeyActionFunc* func)
 }
 
 void
-Input::InputCallback(GLFWwindow* window, int keycode, int scancode, int state, int mods)
+InputCallback(GLFWwindow* window, int keycode, int scancode, int state, int mods)
 {
     // This can be made more efficient later,
     // but will probably not matter much because of the

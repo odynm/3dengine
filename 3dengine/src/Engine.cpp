@@ -1,20 +1,20 @@
 #include "Engine.h"
 
 void
-Engine::Init()
+MAIN_Init()
 {
-	Log::Init();
-	Input::Init();
-	Time::StartFrame();
-	Renderer::Init();
+	LOG_Init();
+	INP_Init();
+	TIME_StartFrame();
+	REN_Init();
 }
 
 void
-Engine::Tick()
+MAIN_Tick()
 {
-	Window::PollEvents();
-	Renderer::Draw();
+	WND_PollEvents();
+	REN_Draw();
 
-	Time::EndFrame();
-	Time::StartFrame();
+	TIME_EndFrame();
+	TIME_StartFrame();
 }

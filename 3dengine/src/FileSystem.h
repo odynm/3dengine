@@ -12,14 +12,9 @@
 #include "SystemTypes/Typedefs.h"
 #include "SystemTypes/String.h"
 
-class FileSystem
-{
-public:
-    static String* ReadContent(const char* path);
-private:
-    FileSystem() {};
-    static uint64 GetFileSize(FILE* file);
-	static FILE * OpenFile(const char* path, const char* mode);
-};
+String* FS_ReadContent(const char* path);
+
+internal uint64 GetFileSize(FILE* file);
+internal FILE * OpenFile(const char* path, const char* mode);
 
 #endif

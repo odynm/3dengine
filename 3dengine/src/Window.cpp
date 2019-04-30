@@ -1,14 +1,12 @@
 #include "Window.h"
 #include "Engine.h"
 
-GLFWwindow* Window::window;
-
 void
-Window::CreateWindow(int width, int height, const char * title)
+WND_CreateWindow(int width, int height, const char * title)
 {
     glfwInit();
 
-    glfwSetErrorCallback(Log::GlfwErrorHandling);
+    glfwSetErrorCallback(LOG_GlfwErrorHandling);
 
     // Init glad and glfw context
     // This could be done on the rendering, but
@@ -20,27 +18,28 @@ Window::CreateWindow(int width, int height, const char * title)
     glfwSetFramebufferSizeCallback(window, FramebufferResizeCallback);
 
     // Init engine modules
-    Engine::Init();
+    MAIN_Init();
 }
 
 void
-Window::DestroyWindow()
+WND_DestroyWindow()
 {
     glfwDestroyWindow(window);
     glfwTerminate();
 }
 
 bool
-Window::HasRequestedQuit()
+WND_HasRequestedQuit()
 {
     return glfwWindowShouldClose(window);
 }
 
-void
-Window::FramebufferResizeCallback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
 void 
-Window::PollEvents() { glfwPollEvents(); }
+WND_PollEvents() { glfwPollEvents(); }
+
+internal
+void
+FramebufferResizeCallback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}

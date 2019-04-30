@@ -1,16 +1,19 @@
 #include "Memory.h"
 
-void* Memory::Alloc(int size)
+void* 
+MEM_Alloc(uint64 size)
 {
 	return calloc(size, 1);
 }
 
-void* Memory::AllocFixed(int size)
+void* 
+MEM_AllocFixed(uint64 size)
 {
 	return calloc(size, 1);
 }
 
-void Memory::Release(void* address)
+void 
+MEM_Release(void* address)
 {
 	free(address);
 }

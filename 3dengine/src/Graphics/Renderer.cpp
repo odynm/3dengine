@@ -1,11 +1,7 @@
 #include "Renderer.h"
 
-uint Renderer::VBO;
-uint Renderer::VAO;
-uint Renderer::shaderProgram;
-
 void
-Renderer::Init()
+REN_Init()
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -19,7 +15,7 @@ Renderer::Init()
 //
 //
 void
-Renderer::Test(float const vertexData[])
+REN_Test(float const vertexData[])
 {
 	const GLubyte* c = glGetString(GL_VERSION);
 
@@ -28,9 +24,9 @@ Renderer::Test(float const vertexData[])
 	glGenBuffers(1, &VBO);
 
 	// SHADER CRAP
-	String* vShaderSource = FileSystem::ReadContent("src/Graphics/Shaders/simple.vertex");
+	String* vShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.vertex");
 
-	String* fShaderSource = FileSystem::ReadContent("src/Graphics/Shaders/simple.frag");
+	String* fShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.frag");
 
 	int success;
 	char errorLog[512];
@@ -89,7 +85,7 @@ Renderer::Test(float const vertexData[])
 }
 
 void
-Renderer::Draw()
+REN_Draw()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -99,5 +95,5 @@ Renderer::Draw()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	glfwSwapBuffers(Window::window);
+	glfwSwapBuffers(window);
 }

@@ -1,14 +1,14 @@
 #include "FileSystem.h"
 
 String*
-FileSystem::ReadContent(const char* path)
+FS_ReadContent(const char* path)
 {
 	FILE* file = OpenFile(path, "r");
 
 	if (file != NULL)
 	{
 		uint64 fileSize = GetFileSize(file);
-		char* buffer = (char*)Memory::Alloc(fileSize);
+		char* buffer = (char*)MEM_Alloc(fileSize);
 		fread(buffer, 1, fileSize, file);
 		fclose(file);
 		return String::NoAllocString(buffer);
@@ -19,8 +19,9 @@ FileSystem::ReadContent(const char* path)
 	}
 }
 
+internal
 uint64
-FileSystem::GetFileSize(FILE* file)
+GetFileSize(FILE* file)
 {
 	fseek(file, 0, SEEK_END);
 	uint64 length = (uint64)ftell(file);
@@ -28,8 +29,9 @@ FileSystem::GetFileSize(FILE* file)
 	return length;
 }
 
+internal
 FILE*
-FileSystem::OpenFile(const char* path, const char* mode)
+OpenFile(const char* path, const char* mode)
 {
 	FILE* file = fopen(path, mode);
 	if (file == NULL)
