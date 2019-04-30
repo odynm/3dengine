@@ -1,6 +1,6 @@
 #include "Time.h"
 
-double delta;
+double Delta;
 
 void
 TIME_StartFrame()
@@ -12,5 +12,5 @@ void
 TIME_EndFrame()
 {
 	// TODO: use a more reliable timer approach then CLOCKS_PER_SEC
-	delta = (clock() - clockTime) / (double)CLOCKS_PER_SEC;
+	Delta = (clock() - clockTime) / (double)CLOCKS_PER_SEC;
 }

@@ -3,7 +3,7 @@
 void
 INP_Init()
 {
-    glfwSetKeyCallback(window, InputCallback);
+    glfwSetKeyCallback(Window, InputCallback);
 }
 
 void

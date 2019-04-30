@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "Engine.h"
 
+GLFWwindow* Window;
+
 void
 WND_CreateWindow(int width, int height, const char * title)
 {
@@ -11,11 +13,11 @@ WND_CreateWindow(int width, int height, const char * title)
     // Init glad and glfw context
     // This could be done on the rendering, but
     // I ultimately decided to leave here
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    glfwMakeContextCurrent(window);
+    Window = glfwCreateWindow(width, height, title, NULL, NULL);
+    glfwMakeContextCurrent(Window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glViewport(0, 0, width, height);
-    glfwSetFramebufferSizeCallback(window, FramebufferResizeCallback);
+    glfwSetFramebufferSizeCallback(Window, FramebufferResizeCallback);
 
     // Init engine modules
     MAIN_Init();
@@ -24,14 +26,14 @@ WND_CreateWindow(int width, int height, const char * title)
 void
 WND_DestroyWindow()
 {
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(Window);
     glfwTerminate();
 }
 
 bool
 WND_HasRequestedQuit()
 {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(Window);
 }
 
 void 

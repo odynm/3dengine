@@ -5,7 +5,7 @@
 
 #include "SystemTypes/Typedefs.h"
 
-extern double delta;
+extern double Delta;
 
 void TIME_StartFrame();
 void TIME_EndFrame();

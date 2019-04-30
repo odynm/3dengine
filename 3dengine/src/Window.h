@@ -8,7 +8,7 @@
 
 #undef CreateWindow // 'Someone' defined this
 
-static GLFWwindow* window;
+extern GLFWwindow* Window;
 
 void WND_CreateWindow(int width, int height, const char* title);
 bool WND_HasRequestedQuit();
