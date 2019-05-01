@@ -1,5 +1,9 @@
 #include "Renderer.h"
 
+uint VBO;
+uint VAO;
+uint shaderProgram;
+
 void
 REN_Init()
 {
@@ -17,6 +21,7 @@ REN_Init()
 void
 REN_Test(float const vertexData[])
 {
+	int success;
 	const GLubyte* c = glGetString(GL_VERSION);
 
 	// INITING
@@ -25,11 +30,7 @@ REN_Test(float const vertexData[])
 
 	// SHADER CRAP
 	String* vShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.vertex");
-
 	String* fShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.frag");
-
-	int success;
-	char errorLog[512];
 
 	uint vShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vShader, 1, &vShaderSource->text, NULL);
@@ -38,8 +39,8 @@ REN_Test(float const vertexData[])
 	glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(vShader, 512, NULL, errorLog);
-		printf("VERTEX SHADER COMPILATION ERROR: "); printf(errorLog);
+		glGetShaderInfoLog(vShader, 512, NULL, LogBuffer);
+		LOG_Log("VERTEX SHADER COMPILATION ERROR");
 	}
 
 	uint fShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -49,8 +50,8 @@ REN_Test(float const vertexData[])
 	glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(fShader, 512, NULL, errorLog);
-		printf("FRAGMENT SHADER COMPILATION ERROR: "); printf(errorLog);
+		glGetShaderInfoLog(fShader, 512, NULL, LogBuffer);
+		LOG_Log("FRAGMENT SHADER COMPILATION ERROR");
 	}
 
 	shaderProgram = glCreateProgram();
@@ -61,8 +62,8 @@ REN_Test(float const vertexData[])
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, errorLog);
-		printf("PROGRAM SHADER LINKING ERROR: "); printf(errorLog);
+		glGetProgramInfoLog(shaderProgram, 512, NULL, LogBuffer);
+		LOG_Log("PROGRAM SHADER LINKING ERROR");
 	}
 
 	glDeleteShader(vShader);
@@ -70,7 +71,6 @@ REN_Test(float const vertexData[])
 
 	// DRAWING
 	glBindVertexArray(VAO);
-
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float*) * 3, vertexData, GL_STATIC_DRAW);
@@ -78,10 +78,8 @@ REN_Test(float const vertexData[])
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glUseProgram(shaderProgram);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glBindVertexArray(NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, NULL);
 }
 
 void

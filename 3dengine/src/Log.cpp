@@ -1,11 +1,23 @@
 #include "Log.h"
 
-char* logBuffer;
+char* LogBuffer;
 
 void
 LOG_Init()
 {
-	logBuffer = (char*)MEM_AllocFixed(1024);
+	LogBuffer = (char*)MEM_AllocFixed(Kb(1));
+}
+
+void
+LOG_RawLog()
+{
+	printf(LogBuffer);
+}
+
+void
+LOG_Log(const char* description)
+{
+	printf("%s: %s\n", description, LogBuffer);
 }
 
 void

@@ -1,31 +1,40 @@
 #include "String.h"
 #include <stdio.h>
 
-String::String(char* c)
+String*
+STR_NewString(char* c)
 {
-	length = 0;
+	int length = 0;
 	while (c[length]) { length++; }
-	text = (char*)MEM_Alloc(length);
-	text[length] = '\0';
-	text = c;
-}
-
-String::String(char const c[])
-{
-	length = 0;
-	while (c[length]) { length++; }
-	text = (char*)MEM_Alloc(length + 1);
-	text[length] = '\0';
-	memcpy(text, c, length);
-}
-
-String::~String()
-{
-	MEM_Release(text);
+	String* s = (String*)MEM_Alloc(length);
+	s->text = (char*)MEM_Alloc(length);
+	s->length = length;
+	s->text[length] = '\0';
+	memcpy(s->text, c, length);
+	return s;
 }
 
 String*
-String::NoAllocString(char* c)
+STR_NewStringA(char const c[])
+{
+	int length = 0;
+	while (c[length]) { length++; }
+	String* s = (String*)MEM_Alloc(length);
+	s->text = (char*)MEM_Alloc(length);
+	s->length = length;
+	s->text[length] = '\0';
+	memcpy(s->text, c, length);
+	return s;
+}
+
+void
+STR_Destroy(void* address)
+{
+	MEM_Release(address);
+}
+
+String*
+STR_NoAllocString(char* c)
 {
 	String* s = (String*)MEM_Alloc(sizeof(String));
 	s->length = 0;

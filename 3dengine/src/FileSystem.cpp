@@ -11,7 +11,7 @@ FS_ReadContent(const char* path)
 		char* buffer = (char*)MEM_Alloc(fileSize);
 		fread(buffer, 1, fileSize, file);
 		fclose(file);
-		return String::NoAllocString(buffer);
+		return STR_NoAllocString(buffer);
 	}
 	else
 	{

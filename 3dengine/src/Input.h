@@ -10,16 +10,16 @@
 typedef void KeyActionFunc(int state);
 
 typedef struct {
-    int keycode;
-    KeyActionFunc* func;
+	int keycode;
+	KeyActionFunc* func;
 } InputActions;
 
-    void INP_Init();
-    void INP_SetKeyAction(int keycode, KeyActionFunc* func);
+void INP_Init();
+void INP_SetKeyAction(int keycode, KeyActionFunc* func);
 
-	internal int numAddedActions;
-	internal InputActions actions[MAX_INPUT_ACTIONS];
+internal int numAddedActions;
+internal InputActions actions[MAX_INPUT_ACTIONS];
 
-	internal void InputCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods);
+internal void InputCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods);
 
 #endif
