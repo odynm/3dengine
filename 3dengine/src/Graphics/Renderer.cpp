@@ -70,14 +70,24 @@ REN_Test(float const vertexData[])
 	glDeleteShader(fShader);
 
 	// DRAWING
+	// Assign VAO for context
 	glBindVertexArray(VAO);
+
+	// Bind buffer to VAO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+	// Set buffer data of the current context (VBO)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float*) * 3, vertexData, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	// More data from the buffer - how the vertex should be read
+	// TODO: see if more than one object can have the same index - like 0
+	int index = 0;
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+	// Enable openGL draw to access this array
+	glEnableVertexAttribArray(index);
+
+	// Unbind everything (we will rebind it on draw)
 	glBindVertexArray(NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, NULL);
 }
@@ -85,13 +95,22 @@ REN_Test(float const vertexData[])
 void
 REN_Draw()
 {
+	// Clear
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// Select shader
 	glUseProgram(shaderProgram);
 
+	// Bind
 	glBindVertexArray(VAO);
+
+	// Draw
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
+	// Unbind
+	glBindVertexArray(NULL);
+
+	// Swap back buffer
 	glfwSwapBuffers(Window);
 }

@@ -33,7 +33,7 @@ void TIME_EndFrame();
 void TIME_EndProtoFrame();
 
 /// When called after a frame update, will return
-/// the actual frame interval
+/// the actual frame 'working' interval
 double TIME_GetRealFrameMS();
 
 #endif

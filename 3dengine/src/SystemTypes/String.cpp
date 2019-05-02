@@ -40,6 +40,5 @@ STR_NoAllocString(char* c)
 	s->length = 0;
 	while (c[s->length]) { s->length++; }
 	s->text = c;
-
 	return s;
 }
