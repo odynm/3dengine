@@ -20,7 +20,7 @@ MAIN_Tick()
 	// Get the real time that the frame took
 	double realFrameMS = TIME_GetRealFrameMS();
 	// Log to console (for now)
-	printf("%fMS, %d FPS, DELTA: %f, REAL MS: %f\n", DB_FrameMS, DB_FPS, Delta, realFrameMS);
+	//printf("%fMS, %d FPS, DELTA: %f, REAL MS: %f\n", DB_FrameMS, DB_FPS, Delta, realFrameMS);
 #endif
 
 	// Cap framerate at 60FPS

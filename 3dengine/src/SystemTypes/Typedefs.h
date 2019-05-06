@@ -10,6 +10,7 @@ typedef uint8_t byte;
 typedef uint32_t uint;
 
 #define internal static
+#define persist static
 
 #define Kb(value) (value*1024)
 #define Mb(value) (value*1024*1024)
