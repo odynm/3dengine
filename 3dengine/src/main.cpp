@@ -4,18 +4,15 @@
 #define HEIGHT 600
 #define TITLE "3D ENGINE"
 
-//orange
 float const vertices[] = {
-	-400.f, -300.f, -1.0f,
-	400.f, -300.f, -1.0f,
-	0.f, 300.f, -1.0f
+	10.f, 10.f, 0.f,
+    10.f, 0.f, 0.f,
+    0.f, 0.f, 0.f,
+    0.f, 10.f, 0.f,
 };
 
-//green
-float const vertices2[] = {
-	-400.f, 300.f, 1.0f,
-	400.f, 300.f, 1.0f,
-	0.f, -300.f, 1.0f
+uint const indices[] = {
+    0,1,3,1,2,3
 };
 
 void callback(int state)
@@ -29,7 +26,7 @@ int main()
 
 	INP_SetKeyAction(GLFW_KEY_W, callback);
 
-	REN_Test(vertices, vertices2);
+	REN_Test(vertices, indices);
 
 	while (!WND_HasRequestedQuit())
 	{

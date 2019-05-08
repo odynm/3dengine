@@ -11,7 +11,7 @@
 #include "../Log.h"
 
 void REN_Init();
-void REN_Test(float const vertexData[], float const vertexData2[]);
+void REN_Test(float const vertexData[], uint const indice[]);
 void REN_Draw();
 
 #endif
