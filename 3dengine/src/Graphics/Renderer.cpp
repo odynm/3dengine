@@ -77,7 +77,8 @@ REN_Init()
     };
 
     uint const indices[] = {
-        0,1,3,1,2,3
+        0,1,3,
+		1,2,3
     };
 
     // Assign the VAO for context
@@ -117,10 +118,17 @@ REN_Init()
     glBindVertexArray(NULL);
 }
 
+// TODO recieve a better list of arguments
+void
+REN_Add(int layer, int x, int y, int w, int h)
+{
+
+}
+
 #include <math.h>
 #include "../Memory.h"
 
-#define i4(x,y) (x*4 + y)
+#define i4(r,c) (r*4 + c)
 
 void
 REN_Draw()
