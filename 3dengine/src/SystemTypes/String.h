@@ -12,7 +12,7 @@
 #include "../Memory.h"
 
 // String with size tracking
-typedef struct String {
+typedef struct sString {
 	int length;
 	char* text;
 } String;

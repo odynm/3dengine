@@ -1,11 +1,6 @@
 #ifndef FILE_SYSTEM_H
 #define FILE_SYSTEM_H
 
-// We are going to do dangerous stuff in here
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

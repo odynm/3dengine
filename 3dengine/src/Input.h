@@ -9,7 +9,7 @@
 
 typedef void KeyActionFunc(int state);
 
-typedef struct {
+typedef struct sInputActions {
 	int keycode;
 	KeyActionFunc* func;
 } InputActions;

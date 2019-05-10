@@ -15,6 +15,12 @@ LOG_RawLog()
 }
 
 void
+LOG_Write(const char* text)
+{
+    sprintf(LogBuffer, text);
+}
+
+void
 LOG_Log(const char* description)
 {
 	printf("%s: %s\n", description, LogBuffer);

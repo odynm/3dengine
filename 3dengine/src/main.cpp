@@ -15,6 +15,8 @@ int main()
 
 	INP_SetKeyAction(GLFW_KEY_W, callback);
 
+    REN_Add(0, 0, 0, 50, 100, 0);
+
 	while (!WND_HasRequestedQuit())
 	{
 		MAIN_Tick();
