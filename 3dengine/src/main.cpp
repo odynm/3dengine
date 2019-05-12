@@ -6,21 +6,23 @@
 
 void callback(int state)
 {
-	printf("%d\n", state);
+    printf("%d\n", state);
 }
 
 int main()
 {
-	WND_CreateWindow(WIDTH, HEIGHT, TITLE);
+    WND_CreateWindow(WIDTH, HEIGHT, TITLE);
 
-	INP_SetKeyAction(GLFW_KEY_W, callback);
+    INP_SetKeyAction(GLFW_KEY_W, callback);
 
-    REN_Add(0, 0, 0, 50, 100, 0);
+    REN_Add(0, -100.f, 200.f, 100, 100);
+    //REN_Add(1, .5f, 0.5f, 100, 100);
+    //REN_Add(4, 0, 0, 200, 30);
 
-	while (!WND_HasRequestedQuit())
-	{
-		MAIN_Tick();
-	}
+    while (!WND_HasRequestedQuit())
+    {
+        MAIN_Tick();
+    }
 
-	WND_DestroyWindow();
+    WND_DestroyWindow();
 }

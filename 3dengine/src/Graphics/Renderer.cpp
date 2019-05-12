@@ -1,6 +1,14 @@
 #include "Renderer.h"
 
-RenderingObject** layers;
+/*
+In the case of crop fields, I think is best o have two kinds of sprites: one for
+top and one from bottom. Merging the together (overlaping a little bit), it would
+not become obvious that they're sprites side by side. They will be animated.
+
+This of course doesn't mean we could not have batches for huge fields.
+
+In both cases, the're needs to be a way to control the crops almost individualy
+*/
 
 uint EBO;
 uint shaderProgram;
@@ -12,18 +20,14 @@ REN_Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //TODO more reliable array/list system
-    layers = (RenderingObject**)MEM_Alloc(sizeof(RenderingObject*) * NUMBER_OF_LAYERS);
-    for (int i = 0; i < NUMBER_OF_LAYERS; i++)
-    {
-        layers[i] = (RenderingObject*)MEM_Alloc(sizeof(RenderingObject) * 10);
-    }
+    int layerData[NUMBER_OF_LAYERS] = { 10,10,10,10,10 };
+    layers = REN_CreateRenderSetLayers(NUMBER_OF_LAYERS, layerData);
 
     //
     // SHADER STUFF
     //
     int success;
-    glGenBuffers(1, &EBO); // Element buffer, contains element data (indices)
+    //glGenBuffers(1, &EBO); // Element buffer, contains element data (indices)
 
     String* vShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.vertex");
     String* fShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.frag");
@@ -70,13 +74,13 @@ REN_Init()
     //
     // BASIC RECTANGLE STUFF
     //
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, indices, GL_STATIC_DRAW);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, indices, GL_STATIC_DRAW);
 }
 
 // TODO recieve a better list of arguments
 void
-REN_Add(int layer, int x, int y, int w, int h, int index)
+REN_Add(int layer, float x, float y, int w, int h)
 {
 #if DEBUG_MODE
     if (layer > NUMBER_OF_LAYERS)
@@ -86,32 +90,42 @@ REN_Add(int layer, int x, int y, int w, int h, int index)
     }
 #endif
 
-    RenderingObject* rObj = &layers[layer][index];
+    RenderingObject* rObj = REN_GetAvailableRenderingObject(layers, layer);
 
-    glGenVertexArrays(10, &rObj->VAO); // Vertex array objects, contains buffers and how to read them
-    glGenBuffers(10, &rObj->VBO); // Vertex buffers, contains vertex data (pos,color)
+    rObj->x = x;
+    rObj->y = y;
+
+    glGenVertexArrays(1, &rObj->VAO); // Vertex array objects, contains buffers and how to read them
+    glGenBuffers(1, &rObj->VBO); // Vertex buffers, contains vertex data (pos,color)
 
     glBindVertexArray(rObj->VAO);
 
-    float* vertices = (float*)MEM_Alloc(sizeof(float) * 12);
+    float* vertices = (float*)MEM_Alloc(sizeof(float) * 8);
 
-    vertices[i3(0, 0)] = w;
-    vertices[i3(0, 1)] = h;
-    vertices[i3(1, 0)] = w;
-    vertices[i3(3, 1)] = h;
+    vertices[i2(0, 0)] = -w / 2.f;
+    vertices[i2(0, 1)] = -h / 2.f;
+
+    vertices[i2(1, 0)] = -w / 2.f;
+    vertices[i2(1, 1)] = h / 2.f;
+
+    vertices[i2(2, 0)] = w / 2.f;
+    vertices[i2(2, 1)] = h / 2.f;
+
+    vertices[i2(3, 0)] = w / 2.f;
+    vertices[i2(3, 1)] = -h / 2.f;
 
     // Bind buffer to VAO and assign vertices
     glBindBuffer(GL_ARRAY_BUFFER, rObj->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * 4, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertices, GL_STATIC_DRAW);
 
     // Bind the EBO too to use the same global
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     // More data from the VAO - how the vertex should be read
     // The index is the index os the attrib pointer inside the VAO
     // You can have for example one attrib pointer for positions and one for colors
     int indexAttrib = 0;
-    glVertexAttribPointer(indexAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
     // Tell OpenGL to use this array as vertex attrib
     glEnableVertexAttribArray(indexAttrib);
@@ -139,9 +153,9 @@ REN_Draw()
     float v = sinf(t);
 
     float n = 2;
-    float right = 800.f/* * fabsf(v)*/;
+    float right = 800.f * fabsf(v);
     float left = 0;
-    float top = 600.f/* * fabsf(v)*/;
+    float top = 800.f * fabsf(v);
     float bottom = 0;
     float* orthomatrix = (float*)MEM_Alloc(sizeof(float) * 16);
     orthomatrix[i4(0, 0)] = n / (right - left);
@@ -156,21 +170,37 @@ REN_Draw()
     GLint loc;
 
     // Uniforms
-    loc = glGetUniformLocation(shaderProgram, "projMatrix");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
+    /*loc = glGetUniformLocation(shaderProgram, "projMatrix");
+    glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);*/
 
-    loc = glGetUniformLocation(shaderProgram, "color");
+    /*loc = glGetUniformLocation(shaderProgram, "color");
     float c1[] = { 88.0f, 0.44f, 0.2f, 1.0f };
-    glUniform4fv(loc, 1, c1);
+    glUniform4fv(loc, 1, c1);*/
 
-    // Bind
-    glBindVertexArray(layers[0][0].VAO);
+    for (int ilayer = 0; ilayer < NUMBER_OF_LAYERS; ilayer++)
+    {
+        for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
+        {
+            float* model = (float*)MEM_Alloc(sizeof(float) * 16);
+            model[i4(0, 0)] = cosf(t);
+            model[i4(0, 1)] = -sinf(t);
+            model[i4(1, 0)] = sinf(t);
+            model[i4(1, 1)] = cosf(t);
 
-    // Draw
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            model[i4(3, 0)] = layers[ilayer]->rObjs[iobj].x * orthomatrix[i4(0, 0)];
+            model[i4(3, 1)] = layers[ilayer]->rObjs[iobj].y * orthomatrix[i4(1, 1)];
+            model[i4(3, 3)] = 1;
 
-    // Unbind
-    glBindVertexArray(NULL);
+            loc = glGetUniformLocation(shaderProgram, "projMatrix");
+            glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
+
+            loc = glGetUniformLocation(shaderProgram, "modelMatrix");
+            glUniformMatrix4fv(loc, 1, GL_FALSE, model);
+
+            glBindVertexArray(layers[ilayer]->rObjs[iobj].VAO);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+    }
 
     // Swap back buffer
     glfwSwapBuffers(Window);

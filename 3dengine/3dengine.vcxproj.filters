@@ -18,6 +18,10 @@
     </ClCompile>
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Memory.cpp" />
+    <ClCompile Include="src\Graphics\RenderSet.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -36,6 +40,10 @@
     </ClInclude>
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Memory.h" />
+    <ClInclude Include="src\Graphics\RenderSet.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">
