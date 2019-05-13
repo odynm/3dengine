@@ -8,6 +8,18 @@ not become obvious that they're sprites side by side. They will be animated.
 This of course doesn't mean we could not have batches for huge fields.
 
 In both cases, the're needs to be a way to control the crops almost individualy
+
+===
+About layers:
+Each layer should have it's own atlas
+At least for the first iterations, nothing in the game will overlap - collisions will not allow it
+If this change, I will need to do some sorting
+If everything is show from top ortho, this method will suffice
+The most likely setup will be:
+terrain
+crops
+people
+machinery
 */
 
 uint EBO;
@@ -197,6 +209,7 @@ REN_Draw()
             loc = glGetUniformLocation(shaderProgram, "modelMatrix");
             glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
+			//TODO test drawtrianglestripe instead of drawelements
             glBindVertexArray(layers[ilayer]->rObjs[iobj].VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }

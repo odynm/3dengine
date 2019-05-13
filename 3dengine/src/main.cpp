@@ -12,6 +12,8 @@ void callback(int state)
 int main()
 {
     WND_CreateWindow(WIDTH, HEIGHT, TITLE);
+	// Init engine modules
+	ENG_Init();
 
     INP_SetKeyAction(GLFW_KEY_W, callback);
 
@@ -21,7 +23,7 @@ int main()
 
     while (!WND_HasRequestedQuit())
     {
-        MAIN_Tick();
+        ENG_Tick();
     }
 
     WND_DestroyWindow();

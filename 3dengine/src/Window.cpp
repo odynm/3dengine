@@ -18,9 +18,6 @@ WND_CreateWindow(int width, int height, const char * title)
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	glViewport(0, 0, width, height);
 	glfwSetFramebufferSizeCallback(Window, FramebufferResizeCallback);
-
-	// Init engine modules
-	MAIN_Init();
 }
 
 void

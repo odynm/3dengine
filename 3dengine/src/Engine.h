@@ -18,7 +18,7 @@
 #include "Time.h"
 #include "Window.h"
 
-void MAIN_Init();
-void MAIN_Tick();
+void ENG_Init();
+void ENG_Tick();
 
 #endif

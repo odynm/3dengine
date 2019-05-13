@@ -1,17 +1,16 @@
 #include "Engine.h"
 
 void
-MAIN_Init()
+ENG_Init()
 {
 	LOG_Init();
 	INP_Init();
 	TIME_Init();
-	TIME_StartFrame();
 	REN_Init();
 }
 
 void
-MAIN_Tick()
+ENG_Tick()
 {
 	WND_PollEvents();
 	REN_Draw();
