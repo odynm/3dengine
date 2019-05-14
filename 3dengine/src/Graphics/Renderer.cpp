@@ -93,13 +93,7 @@ REN_Init()
 void
 REN_Add(int layer, float x, float y, int w, int h)
 {
-#if DEBUG_MODE
-    if (layer > NUMBER_OF_LAYERS)
-    {
-        LOG_Write("RENDERER ERROR: The layer is out of range");
-        LOG_RawLog();
-    }
-#endif
+	Assert(layer >= NUMBER_OF_LAYERS);
 
     RenderingObject* rObj = REN_GetAvailableRenderingObject(layers, layer);
 
@@ -113,7 +107,7 @@ REN_Add(int layer, float x, float y, int w, int h)
 
     float* vertices = (float*)MEM_Alloc(sizeof(float) * 8);
 
-    vertices[i2(0, 0)] = -w/2.f;
+    vertices[i2(0, 0)] = -w / 2.f;
     vertices[i2(0, 1)] = -w / 2.f;
 
     vertices[i2(1, 0)] = -w / 2.f;

@@ -6,6 +6,12 @@
 #include "Memory.h"
 #include "SystemTypes/Typedefs.h"
 
+#ifdef DEBUG_MODE
+#define Assert(boolean) if (boolean) int i = *((int*)NULL);
+#else
+#define Assert(boolean)
+#endif
+
 extern char* LogBuffer;
 
 void LOG_Init();
