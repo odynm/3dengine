@@ -184,6 +184,7 @@ REN_Draw()
         for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
         {
             float* model = (float*)MEM_Alloc(sizeof(float) * 16);
+            //TODO trigonometric lookup
             model[i4(0, 0)] = cosf(t);
             model[i4(0, 1)] = -sinf(t);
             model[i4(1, 0)] = sinf(t);
