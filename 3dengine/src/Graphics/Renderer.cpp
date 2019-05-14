@@ -22,7 +22,6 @@ people
 machinery
 */
 
-uint EBO;
 uint shaderProgram;
 
 void
@@ -114,24 +113,21 @@ REN_Add(int layer, float x, float y, int w, int h)
 
     float* vertices = (float*)MEM_Alloc(sizeof(float) * 8);
 
-    vertices[i2(0, 0)] = -w / 2.f;
-    vertices[i2(0, 1)] = -h / 2.f;
+    vertices[i2(0, 0)] = -w/2.f;
+    vertices[i2(0, 1)] = -w / 2.f;
 
     vertices[i2(1, 0)] = -w / 2.f;
-    vertices[i2(1, 1)] = h / 2.f;
+    vertices[i2(1, 1)] = w / 2.f;
 
     vertices[i2(2, 0)] = w / 2.f;
-    vertices[i2(2, 1)] = h / 2.f;
+    vertices[i2(2, 1)] = -w / 2.f;
 
     vertices[i2(3, 0)] = w / 2.f;
-    vertices[i2(3, 1)] = -h / 2.f;
+    vertices[i2(3, 1)] = w / 2.f;
 
     // Bind buffer to VAO and assign vertices
     glBindBuffer(GL_ARRAY_BUFFER, rObj->VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertices, GL_STATIC_DRAW);
-
-    // Bind the EBO too to use the same global
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     // More data from the VAO - how the vertex should be read
     // The index is the index os the attrib pointer inside the VAO
@@ -209,9 +205,11 @@ REN_Draw()
             loc = glGetUniformLocation(shaderProgram, "modelMatrix");
             glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
-			//TODO test drawtrianglestripe instead of drawelements
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
             glBindVertexArray(layers[ilayer]->rObjs[iobj].VAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			//TODO use glMultiDrawArrays for batching
         }
     }
 

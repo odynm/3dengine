@@ -8,8 +8,9 @@ FS_ReadContent(const char* path)
 	if (file != NULL)
 	{
 		uint64 fileSize = GetFileSize(file);
-		char* buffer = (char*)MEM_Alloc(fileSize);
+		char* buffer = (char*)MEM_Alloc(fileSize+1);
 		fread(buffer, 1, fileSize, file);
+		buffer[fileSize] = NULL;
 		fclose(file);
 		return STR_NoAllocString(buffer);
 	}
