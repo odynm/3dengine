@@ -23,6 +23,8 @@ machinery
 */
 
 uint shaderProgram;
+// TODO transform this in a vector2
+float* positions = (float*)MEM_Alloc(4 * sizeof(float));
 
 void
 REN_Init()
@@ -119,6 +121,9 @@ REN_Add(int layer, float x, float y, int w, int h)
     vertices[i2(3, 0)] = w / 2.f;
     vertices[i2(3, 1)] = w / 2.f;
 
+    positions[i2(rObj->instanceID, 0)] = x;
+    positions[i2(rObj->instanceID, 1)] = y;
+
     // Bind buffer to VAO and assign vertices
     glBindBuffer(GL_ARRAY_BUFFER, rObj->VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertices, GL_STATIC_DRAW);
@@ -152,6 +157,7 @@ REN_Draw()
 
     persist float t = 0.0;
     t += 0.01f;
+    t = 1.0f;
     float v = sinf(t);
 
     float n = 2;
@@ -181,18 +187,18 @@ REN_Draw()
 
     for (int ilayer = 0; ilayer < NUMBER_OF_LAYERS; ilayer++)
     {
-        for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
-        {
+        //for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
+        //{
             float* model = (float*)MEM_Alloc(sizeof(float) * 16);
             //TODO trigonometric lookup
-            model[i4(0, 0)] = cosf(t);
+            /*model[i4(0, 0)] = cosf(t);
             model[i4(0, 1)] = -sinf(t);
             model[i4(1, 0)] = sinf(t);
             model[i4(1, 1)] = cosf(t);
 
             model[i4(3, 0)] = layers[ilayer]->rObjs[iobj].x * orthomatrix[i4(0, 0)];
             model[i4(3, 1)] = layers[ilayer]->rObjs[iobj].y * orthomatrix[i4(1, 1)];
-            model[i4(3, 3)] = 1;
+            model[i4(3, 3)] = 1;*/
 
             loc = glGetUniformLocation(shaderProgram, "projMatrix");
             glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
@@ -200,12 +206,23 @@ REN_Draw()
             loc = glGetUniformLocation(shaderProgram, "modelMatrix");
             glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            loc = glGetUniformLocation(shaderProgram, "positions[0]");
+            glUniform2f(loc, positions[i2(0, 0)], positions[i2(0, 1)]);
 
-            glBindVertexArray(layers[ilayer]->rObjs[iobj].VAO);
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            loc = glGetUniformLocation(shaderProgram, "positions[1]");
+            glUniform2f(loc, positions[i2(1, 0)], positions[i2(1, 1)]);
+
+            // Use instanced arrays
+            // review projection and model on shader
+
 			//TODO use glMultiDrawArrays for batching
-        }
+        //}
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        glBindVertexArray(layers[ilayer]->rObjs[0].VAO);
+
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 2);
+
     }
 
     // Swap back buffer

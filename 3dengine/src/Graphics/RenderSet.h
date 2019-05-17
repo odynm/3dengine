@@ -27,6 +27,7 @@ Empty RenderingObjects inside the set have zeroed VAOs and they index is added "
 */
 
 typedef struct sRenderingObject {
+    uint instanceID;
     uint VAO;
     uint VBO;
     float x, y;

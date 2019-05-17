@@ -9,6 +9,11 @@ RenderSet** REN_CreateRenderSetLayers(int numLayers, int const sizes[])
         set->length = sizes[i];
         set->rObjs = (RenderingObject*)MEM_Alloc(sizeof(RenderingObject) * set->length);
 
+        for (int j = 0; j < set->length; j++)
+        {
+            set->rObjs[j].instanceID = j;
+        }
+
         layers[i] = set;
     }
 
@@ -17,5 +22,6 @@ RenderSet** REN_CreateRenderSetLayers(int numLayers, int const sizes[])
 
 RenderingObject* REN_GetAvailableRenderingObject(RenderSet** layers, int layer)
 {
-    return &layers[layer]->rObjs[layers[layer]->lastSlot];
+    layers[layer]->lastSlot++;
+    return &layers[layer]->rObjs[layers[layer]->lastSlot-1];
 }
