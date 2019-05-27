@@ -21,7 +21,7 @@ uint const indices[] = {
 };
 
 void REN_Init();
-void REN_Add(int layer, float x, float y, int w, int h);
+void REN_Add(int layer, float x, float y, float w, float h);
 void REN_Draw();
 
 internal RenderSet** layers;

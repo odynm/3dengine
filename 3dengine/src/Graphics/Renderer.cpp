@@ -23,6 +23,8 @@ machinery
 */
 
 uint shaderProgram;
+uint VAO;
+uint VBO;
 // TODO transform this in a vector2
 float* positions = (float*)MEM_Alloc(4 * sizeof(float));
 
@@ -84,49 +86,28 @@ REN_Init()
 
     //
 
-    //
-    // BASIC RECTANGLE STUFF
-    //
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, indices, GL_STATIC_DRAW);
-}
+    glGenVertexArrays(1, &VAO); // Vertex array objects, contains buffers and how to read them
+    glGenBuffers(1, &VBO); // Vertex buffers, contains vertex data (pos,color)
 
-// TODO recieve a better list of arguments
-void
-REN_Add(int layer, float x, float y, int w, int h)
-{
-	Assert(layer >= NUMBER_OF_LAYERS);
+    glBindVertexArray(VAO);
 
-    RenderingObject* rObj = REN_GetAvailableRenderingObject(layers, layer);
+    // Create basic quad shape
+    float* quad = (float*)MEM_Alloc(8 * sizeof(float));
+    quad[i2(0, 0)] = -1.f / 2.f;
+    quad[i2(0, 1)] = -1.f / 2.f;
 
-    rObj->x = x;
-    rObj->y = y;
+    quad[i2(1, 0)] = -1.f / 2.f;
+    quad[i2(1, 1)] = 1.f / 2.f;
 
-    glGenVertexArrays(1, &rObj->VAO); // Vertex array objects, contains buffers and how to read them
-    glGenBuffers(1, &rObj->VBO); // Vertex buffers, contains vertex data (pos,color)
+    quad[i2(2, 0)] = 1.f / 2.f;
+    quad[i2(2, 1)] = -1.f / 2.f;
 
-    glBindVertexArray(rObj->VAO);
-
-    float* vertices = (float*)MEM_Alloc(sizeof(float) * 8);
-
-    vertices[i2(0, 0)] = -w / 2.f;
-    vertices[i2(0, 1)] = -w / 2.f;
-
-    vertices[i2(1, 0)] = -w / 2.f;
-    vertices[i2(1, 1)] = w / 2.f;
-
-    vertices[i2(2, 0)] = w / 2.f;
-    vertices[i2(2, 1)] = -w / 2.f;
-
-    vertices[i2(3, 0)] = w / 2.f;
-    vertices[i2(3, 1)] = w / 2.f;
-
-    positions[i2(rObj->instanceID, 0)] = x;
-    positions[i2(rObj->instanceID, 1)] = y;
+    quad[i2(3, 0)] = 1.f / 2.f;
+    quad[i2(3, 1)] = 1.f / 2.f;
 
     // Bind buffer to VAO and assign vertices
-    glBindBuffer(GL_ARRAY_BUFFER, rObj->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, quad, GL_STATIC_DRAW);
 
     // More data from the VAO - how the vertex should be read
     // The index is the index os the attrib pointer inside the VAO
@@ -136,6 +117,31 @@ REN_Add(int layer, float x, float y, int w, int h)
 
     // Tell OpenGL to use this array as vertex attrib
     glEnableVertexAttribArray(indexAttrib);
+}
+
+// TODO recieve a better list of arguments
+void
+REN_Add(int layer, float x, float y, float w, float h)
+{
+    Assert(layer >= NUMBER_OF_LAYERS);
+
+    RenderingObject* rObj = REN_GetAvailableRenderingObject(layers, layer);
+
+    rObj->x = x;
+    rObj->y = y;
+
+    positions[i2(rObj->instanceID, 0)] = x;
+    positions[i2(rObj->instanceID, 1)] = y;
+
+    // Set size uniform
+    glUseProgram(shaderProgram);
+
+    char formatedLoc[10];
+    sprintf(formatedLoc, "size[%d]", rObj->instanceID);
+    GLint loc = glGetUniformLocation(shaderProgram, formatedLoc);
+    glUniform2f(loc, w, h);
+
+    //glBufferSubData(GL_ARRAY_BUFFER, rObj->instanceID * sizeof(float) * 8, sizeof(float) * 8, vertices);
 
     // Unbind everything (we will rebind it on draw)
     glBindBuffer(GL_ARRAY_BUFFER, NULL);
@@ -189,40 +195,38 @@ REN_Draw()
     {
         //for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
         //{
-            float* model = (float*)MEM_Alloc(sizeof(float) * 16);
-            //TODO trigonometric lookup
-            /*model[i4(0, 0)] = cosf(t);
-            model[i4(0, 1)] = -sinf(t);
-            model[i4(1, 0)] = sinf(t);
-            model[i4(1, 1)] = cosf(t);
+        float* model = (float*)MEM_Alloc(sizeof(float) * 16);
+        //TODO trigonometric lookup
+        /*model[i4(0, 0)] = cosf(t);
+        model[i4(0, 1)] = -sinf(t);
+        model[i4(1, 0)] = sinf(t);
+        model[i4(1, 1)] = cosf(t);
 
-            model[i4(3, 0)] = layers[ilayer]->rObjs[iobj].x * orthomatrix[i4(0, 0)];
-            model[i4(3, 1)] = layers[ilayer]->rObjs[iobj].y * orthomatrix[i4(1, 1)];
-            model[i4(3, 3)] = 1;*/
+        model[i4(3, 0)] = layers[ilayer]->rObjs[iobj].x * orthomatrix[i4(0, 0)];
+        model[i4(3, 1)] = layers[ilayer]->rObjs[iobj].y * orthomatrix[i4(1, 1)];
+        model[i4(3, 3)] = 1;*/
 
-            loc = glGetUniformLocation(shaderProgram, "projMatrix");
-            glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
+        loc = glGetUniformLocation(shaderProgram, "projMatrix");
+        glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
 
-            loc = glGetUniformLocation(shaderProgram, "modelMatrix");
-            glUniformMatrix4fv(loc, 1, GL_FALSE, model);
+        loc = glGetUniformLocation(shaderProgram, "modelMatrix");
+        glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
-            loc = glGetUniformLocation(shaderProgram, "positions[0]");
-            glUniform2f(loc, positions[i2(0, 0)], positions[i2(0, 1)]);
+        for (int iinstance = 0; iinstance < layers[ilayer]->lastSlot; iinstance++)
+        {
+            RenderingObject rObj = layers[ilayer]->rObjs[iinstance];
 
-            loc = glGetUniformLocation(shaderProgram, "positions[1]");
-            glUniform2f(loc, positions[i2(1, 0)], positions[i2(1, 1)]);
+            char formatedLoc[16];
+            sprintf(formatedLoc, "positions[%d]", rObj.instanceID);
+            loc = glGetUniformLocation(shaderProgram, formatedLoc);
+            glUniform2f(loc, rObj.x, rObj.y);
+        }
 
-            // Use instanced arrays
-            // review projection and model on shader
-
-			//TODO use glMultiDrawArrays for batching
-        //}
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        glBindVertexArray(layers[ilayer]->rObjs[0].VAO);
+        glBindVertexArray(VAO);
 
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 2);
-
     }
 
     // Swap back buffer
