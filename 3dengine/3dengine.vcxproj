@@ -155,9 +155,10 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\code\glad\glad.c" />
+    <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
-    <ClCompile Include="src\glad\glad.c" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\RenderSet.cpp" />
     <ClCompile Include="src\Input.cpp" />

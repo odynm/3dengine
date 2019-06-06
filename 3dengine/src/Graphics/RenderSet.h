@@ -8,10 +8,11 @@
 /*
 - We will probably want to render crop fields in big batches
 instead of drawing it sprite by sprite
-A good approach will be to batch the crop sprites in bitmaps
+
+/==A good approach will be to batch the crop sprites in bitmaps
 and use those bitmaps as the texture. That will reduce the draw-calls
 to one for crop-field, although we would not be able to reuse the same bitmap
-for various fields.
+for various fields.==/ update: this will not be used anymore, we will batch small animated sprites
 
 - We will want to sort by texture too
 
@@ -26,9 +27,11 @@ The layers have different sizes depending on the usability
 Empty RenderingObjects inside the set have zeroed VAOs and they index is added "availableSlots"
 */
 
+//TODO: should we have fixed rendering obj, where either xy, txty, or both are not needed?
 typedef struct sRenderingObject {
     uint instanceID;
     float x, y;
+    float tx, ty;
 } RenderingObject;
 
 typedef struct sRenderSet {

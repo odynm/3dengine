@@ -9,9 +9,6 @@
     <ClCompile Include="src\SystemTypes\String.cpp">
       <Filter>SystemTypes</Filter>
     </ClCompile>
-    <ClCompile Include="src\glad\glad.c">
-      <Filter>glad</Filter>
-    </ClCompile>
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp">
       <Filter>Graphics</Filter>
@@ -22,6 +19,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Math.cpp" />
+    <ClCompile Include="..\dependencies\code\glad\glad.c">
+      <Filter>Dependencies\glad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp">
+      <Filter>Dependencies\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -49,14 +52,20 @@
     <Filter Include="SystemTypes">
       <UniqueIdentifier>{e28ee94e-6004-4531-9504-06b8c5d0f3f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="glad">
-      <UniqueIdentifier>{68dc3954-2bfc-4c17-b8a2-8cef995911a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{b2793b24-0b8a-4f94-aa9f-9b8bdc275d9d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics\Shaders">
       <UniqueIdentifier>{1a61890c-e2a2-43a3-8d3d-e49444266630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{6bb8b6f3-e562-4d56-bae6-e58195a42da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\glad">
+      <UniqueIdentifier>{f927d0a0-f02a-4c2a-9c25-cb4f6e8336c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\stb_image">
+      <UniqueIdentifier>{5718818f-3d39-4f9b-acc1-045b68c66c18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

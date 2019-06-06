@@ -1,6 +1,14 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+/*
+(Un)Supported features:
+* size is fixed
+* only supported quads for sprite rendering
+* dynamic position and texture coord
+
+*/
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -21,7 +29,8 @@ uint const indices[] = {
 };
 
 void REN_Init();
-void REN_Add(int layer, float x, float y, float w, float h);
+void REN_AddTexture(byte* textureBuffer, int width, int height);
+void REN_AddSprite(int layer, float x, float y, float w, float h, float tx, float ty);
 void REN_Draw();
 
 internal RenderSet** layers;

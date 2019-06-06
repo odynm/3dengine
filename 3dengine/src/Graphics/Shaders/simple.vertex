@@ -1,14 +1,22 @@
 #version 330 core
 layout (location = 0) in vec2 form;
+layout (location = 1) in vec2 texCoordinates;
 
 uniform mat4 projMatrix;
 uniform mat4 modelMatrix;
-uniform vec2 positions[2];
 uniform vec2 size[2];
+uniform vec2 positions[2];
+
+flat out int InstanceID; 
+out vec2 texCoord;
 
 void main()
 {
+	InstanceID = gl_InstanceID;
+
 	vec2 pos = positions[gl_InstanceID];
 	vec2 s = size[gl_InstanceID];
 	gl_Position = /*modelMatrix */ projMatrix * vec4((form * s) + pos, 0.0, 1.0);
+
+	texCoord = texCoordinates;
 }

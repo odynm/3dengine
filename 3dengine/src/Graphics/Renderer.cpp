@@ -2,12 +2,12 @@
 
 /*
 In the case of crop fields, I think is best o have two kinds of sprites: one for
-top and one from bottom. Merging the together (overlaping a little bit), it would
+top and one from bottom. Merging them together (overlaping a little bit), it would
 not become obvious that they're sprites side by side. They will be animated.
 
-This of course doesn't mean we could not have batches for huge fields.
+This of course doesn't mean that we can't have batches for huge fields.
 
-In both cases, the're needs to be a way to control the crops almost individualy
+In both cases, there needs to be a way to control the crops almost individualy
 
 ===
 About layers:
@@ -22,11 +22,16 @@ people
 machinery
 */
 
+//TODO would it be possible to not use buffer data at all? or to reuse
+//the same in all objects. because it will not change between objects, if 
+//everything works as expected - everything will be done with shader parameters
+
 uint shaderProgram;
 uint VAO;
 uint VBO;
 // TODO transform this in a vector2
 float* positions = (float*)MEM_Alloc(4 * sizeof(float));
+uint texture;
 
 void
 REN_Init()
@@ -91,37 +96,73 @@ REN_Init()
 
     glBindVertexArray(VAO);
 
-    // Create basic quad shape
-    float* quad = (float*)MEM_Alloc(8 * sizeof(float));
-    quad[i2(0, 0)] = -1.f / 2.f;
-    quad[i2(0, 1)] = -1.f / 2.f;
+    float* vertexData = (float*)MEM_Alloc(16 * sizeof(float));
+    // Create basic quad shape and basic coords
 
-    quad[i2(1, 0)] = -1.f / 2.f;
-    quad[i2(1, 1)] = 1.f / 2.f;
+    vertexData[i2(0, 0)] = -1.f / 2.f;
+    vertexData[i2(0, 1)] = -1.f / 2.f;
 
-    quad[i2(2, 0)] = 1.f / 2.f;
-    quad[i2(2, 1)] = -1.f / 2.f;
+    vertexData[i2(1, 0)] = 1.f;
+    vertexData[i2(1, 1)] = 1.f;
 
-    quad[i2(3, 0)] = 1.f / 2.f;
-    quad[i2(3, 1)] = 1.f / 2.f;
+    vertexData[i2(2, 0)] = -1.f / 2.f;
+    vertexData[i2(2, 1)] = 1.f / 2.f;
+
+    vertexData[i2(3, 0)] = 1.f;
+    vertexData[i2(3, 1)] = 0.f;
+
+    vertexData[i2(4, 0)] = 1.f / 2.f;
+    vertexData[i2(4, 1)] = -1.f / 2.f;
+
+    vertexData[i2(5, 0)] = 0.f;
+    vertexData[i2(5, 1)] = 0.f;
+
+    vertexData[i2(6, 0)] = 1.f / 2.f;
+    vertexData[i2(6, 1)] = 1.f / 2.f;
+
+    vertexData[i2(7, 0)] = 0.f;
+    vertexData[i2(7, 1)] = 1.f;
+
+    /*vertexData[i2(0, 0)] = -1.f / 2.f;
+    vertexData[i2(0, 1)] = -1.f / 2.f;
+
+    vertexData[i2(1, 0)] = -1.f / 2.f;
+    vertexData[i2(1, 1)] = 1.f / 2.f;
+
+    vertexData[i2(2, 0)] = 1.f / 2.f;
+    vertexData[i2(2, 1)] = -1.f / 2.f;
+
+    vertexData[i2(3, 0)] = 1.f / 2.f;
+    vertexData[i2(3, 1)] = 1.f / 2.f;*/
 
     // Bind buffer to VAO and assign vertices
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8, quad, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 16, vertexData, GL_STATIC_DRAW);
 
     // More data from the VAO - how the vertex should be read
     // The index is the index os the attrib pointer inside the VAO
     // You can have for example one attrib pointer for positions and one for colors
     int indexAttrib = 0;
-    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    //form
+    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    //tex coord
+    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 
     // Tell OpenGL to use this array as vertex attrib
     glEnableVertexAttribArray(indexAttrib);
 }
 
+void
+REN_AddTexture(byte* textureBuffer, int width, int height)
+{
+    glGenTextures(1, &texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureBuffer);
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+
 // TODO recieve a better list of arguments
 void
-REN_Add(int layer, float x, float y, float w, float h)
+REN_AddSprite(int layer, float x, float y, float w, float h, float tx, float ty)
 {
     Assert(layer >= NUMBER_OF_LAYERS);
 
@@ -129,6 +170,8 @@ REN_Add(int layer, float x, float y, float w, float h)
 
     rObj->x = x;
     rObj->y = y;
+    rObj->tx = tx;
+    rObj->ty = ty;
 
     positions[i2(rObj->instanceID, 0)] = x;
     positions[i2(rObj->instanceID, 1)] = y;
@@ -136,18 +179,25 @@ REN_Add(int layer, float x, float y, float w, float h)
     // Set size uniform
     glUseProgram(shaderProgram);
 
-    char formatedLoc[10];
+    GLint loc;
+    char formatedLoc[16];
+
     sprintf(formatedLoc, "size[%d]", rObj->instanceID);
-    GLint loc = glGetUniformLocation(shaderProgram, formatedLoc);
+    loc = glGetUniformLocation(shaderProgram, formatedLoc);
     glUniform2f(loc, w, h);
+
+    sprintf(formatedLoc, "_texture[%d]", rObj->instanceID);
+    loc = glGetUniformLocation(shaderProgram, formatedLoc);
+    glUniform2f(loc, tx, ty);
 
     //glBufferSubData(GL_ARRAY_BUFFER, rObj->instanceID * sizeof(float) * 8, sizeof(float) * 8, vertices);
 
-    // Unbind everything (we will rebind it on draw)
+    // Unbind everything (we will rebind it later on draw)
     glBindBuffer(GL_ARRAY_BUFFER, NULL);
     glBindVertexArray(NULL);
 }
 
+//TODO should not be needed when done
 #include <math.h>
 #include "../Memory.h"
 
@@ -160,6 +210,9 @@ REN_Draw()
 
     // Select shader
     glUseProgram(shaderProgram);
+
+    // Select texture
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     persist float t = 0.0;
     t += 0.01f;
@@ -191,6 +244,7 @@ REN_Draw()
     float c1[] = { 88.0f, 0.44f, 0.2f, 1.0f };
     glUniform4fv(loc, 1, c1);*/
 
+    //TODO: it will be best if we had a list of only dirty objects that need update
     for (int ilayer = 0; ilayer < NUMBER_OF_LAYERS; ilayer++)
     {
         //for (int iobj = 0; iobj < layers[ilayer]->lastSlot + 1; iobj++)
@@ -212,17 +266,25 @@ REN_Draw()
         loc = glGetUniformLocation(shaderProgram, "modelMatrix");
         glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
+        loc = glGetUniformLocation(shaderProgram, "texCoordinates");
+        glUniformMatrix4fv(loc, 1, GL_FALSE, model);
+
         for (int iinstance = 0; iinstance < layers[ilayer]->lastSlot; iinstance++)
         {
             RenderingObject rObj = layers[ilayer]->rObjs[iinstance];
 
-            char formatedLoc[16];
+            char formatedLoc[32];
             sprintf(formatedLoc, "positions[%d]", rObj.instanceID);
             loc = glGetUniformLocation(shaderProgram, formatedLoc);
             glUniform2f(loc, rObj.x, rObj.y);
+
+            sprintf(formatedLoc, "textureCoords[%d]", rObj.instanceID);
+            loc = glGetUniformLocation(shaderProgram, formatedLoc);
+            glUniform2f(loc, rObj.tx, rObj.ty);
         }
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        // wireframe
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         glBindVertexArray(VAO);
 
