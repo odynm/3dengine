@@ -99,29 +99,31 @@ REN_Init()
     float* vertexData = (float*)MEM_Alloc(16 * sizeof(float));
     // Create basic quad shape and basic coords
 
+    // Note: order of texture coordinates depends directly on order of pixel placement
+    // because a vertex coord sets the position of texture in that vertice
     vertexData[i2(0, 0)] = -1.f / 2.f;
     vertexData[i2(0, 1)] = -1.f / 2.f;
 
-    vertexData[i2(1, 0)] = 1.f;
+    vertexData[i2(1, 0)] = 0.f;
     vertexData[i2(1, 1)] = 1.f;
 
     vertexData[i2(2, 0)] = -1.f / 2.f;
     vertexData[i2(2, 1)] = 1.f / 2.f;
 
-    vertexData[i2(3, 0)] = 1.f;
+    vertexData[i2(3, 0)] = 0.f;
     vertexData[i2(3, 1)] = 0.f;
 
     vertexData[i2(4, 0)] = 1.f / 2.f;
     vertexData[i2(4, 1)] = -1.f / 2.f;
 
-    vertexData[i2(5, 0)] = 0.f;
-    vertexData[i2(5, 1)] = 0.f;
+    vertexData[i2(5, 0)] = 1.f;
+    vertexData[i2(5, 1)] = 1.f;
 
     vertexData[i2(6, 0)] = 1.f / 2.f;
     vertexData[i2(6, 1)] = 1.f / 2.f;
 
-    vertexData[i2(7, 0)] = 0.f;
-    vertexData[i2(7, 1)] = 1.f;
+    vertexData[i2(7, 0)] = 1.f;
+    vertexData[i2(7, 1)] = 0.f;
 
     /*vertexData[i2(0, 0)] = -1.f / 2.f;
     vertexData[i2(0, 1)] = -1.f / 2.f;
@@ -158,12 +160,12 @@ void
 REN_AddTexture(byte* textureBuffer, int width, int height)
 {
     glGenTextures(1, &texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureBuffer);
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 

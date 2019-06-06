@@ -6,7 +6,7 @@
 #define TITLE "3D ENGINE"
 
 int width, height, nrChannels;
-byte *texture = stbi_load("data/duck.jpg", &width, &height, &nrChannels, 0);
+byte *texture = stbi_load("data/duck.jpg", &width, &height, &nrChannels, STBI_rgb_alpha);
 
 void callback(int state)
 {
