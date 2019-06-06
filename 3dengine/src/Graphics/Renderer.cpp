@@ -142,20 +142,27 @@ REN_Init()
     // More data from the VAO - how the vertex should be read
     // The index is the index os the attrib pointer inside the VAO
     // You can have for example one attrib pointer for positions and one for colors
-    int indexAttrib = 0;
+    int indexAttribPos = 0;
+	int indexAttribTex = 1;
     //form
-    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glVertexAttribPointer(indexAttribPos, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     //tex coord
-    glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glVertexAttribPointer(indexAttribTex, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
     // Tell OpenGL to use this array as vertex attrib
-    glEnableVertexAttribArray(indexAttrib);
+    glEnableVertexAttribArray(indexAttribPos);
+	glEnableVertexAttribArray(indexAttribTex);
 }
 
 void
 REN_AddTexture(byte* textureBuffer, int width, int height)
 {
     glGenTextures(1, &texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureBuffer);
     glGenerateMipmap(GL_TEXTURE_2D);
 }
@@ -211,9 +218,6 @@ REN_Draw()
     // Select shader
     glUseProgram(shaderProgram);
 
-    // Select texture
-    glBindTexture(GL_TEXTURE_2D, texture);
-
     persist float t = 0.0;
     t += 0.01f;
     t = 1.0f;
@@ -268,6 +272,9 @@ REN_Draw()
 
         loc = glGetUniformLocation(shaderProgram, "texCoordinates");
         glUniformMatrix4fv(loc, 1, GL_FALSE, model);
+
+		loc = glGetUniformLocation(shaderProgram, "_texture");
+		glUniform1i(loc, texture);
 
         for (int iinstance = 0; iinstance < layers[ilayer]->lastSlot; iinstance++)
         {
