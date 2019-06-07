@@ -6,7 +6,7 @@
 #define TITLE "3D ENGINE"
 
 int width, height, nrChannels;
-byte *texture = stbi_load("data/duck.png", &width, &height, &nrChannels, STBI_rgb);
+byte *texture = stbi_load("data/duck_shades.png", &width, &height, &nrChannels, STBI_rgb_alpha);
 
 void callback(int state)
 {
@@ -25,7 +25,7 @@ int main()
 
     REN_AddTexture(texture, width, height);
 
-    REN_AddSprite(0, 100.f, 0.f, 120.f, 120.f, 0.f, 1.f);
+    REN_AddSprite(0, 50.f, 0.f, 200, 200, 0.f, 1.f);
     REN_AddSprite(0, 0.f, 50., 100.f, 100.f, 0.f, 1.f);
     //REN_Add(1, .5f, 0.5f, 100, 100);
     //REN_Add(4, 0, 0, 200, 30);
