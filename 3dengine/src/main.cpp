@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "stb_image/stb_image.h"
+#include "OpenAL/al.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -15,6 +16,8 @@ void callback(int state)
 
 int main()
 {
+    alGenBuffers(1, 0);
+
     printf("%d\n", width);
 
     WND_CreateWindow(WIDTH, HEIGHT, TITLE);
