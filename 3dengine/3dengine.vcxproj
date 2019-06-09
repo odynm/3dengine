@@ -96,6 +96,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLAT_WINDOWS;DEBUG_INFO;DEBUG_MODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\x64\glfw3.lib;$(SolutionDir)\dependencies\lib\OpenAL\Win64\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
