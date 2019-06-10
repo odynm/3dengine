@@ -47,7 +47,6 @@ REN_Init()
     // SHADER STUFF
     //
     int success;
-    //glGenBuffers(1, &EBO); // Element buffer, contains element data (indices)
 
     String* vShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.vertex");
     String* fShaderSource = FS_ReadContent("src/Graphics/Shaders/simple.frag");
@@ -89,8 +88,6 @@ REN_Init()
     glDeleteShader(vShader);
     glDeleteShader(fShader);
 
-    //
-
     glGenVertexArrays(1, &VAO); // Vertex array objects, contains buffers and how to read them
     glGenBuffers(1, &VBO); // Vertex buffers, contains vertex data (pos,color)
 
@@ -124,18 +121,6 @@ REN_Init()
 
     vertexData[i2(7, 0)] = 1.f;
     vertexData[i2(7, 1)] = 0.f;
-
-    /*vertexData[i2(0, 0)] = -1.f / 2.f;
-    vertexData[i2(0, 1)] = -1.f / 2.f;
-
-    vertexData[i2(1, 0)] = -1.f / 2.f;
-    vertexData[i2(1, 1)] = 1.f / 2.f;
-
-    vertexData[i2(2, 0)] = 1.f / 2.f;
-    vertexData[i2(2, 1)] = -1.f / 2.f;
-
-    vertexData[i2(3, 0)] = 1.f / 2.f;
-    vertexData[i2(3, 1)] = 1.f / 2.f;*/
 
     // Bind buffer to VAO and assign vertices
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -204,8 +189,6 @@ REN_AddSprite(int layer, float x, float y, float w, float h, float tx, float ty)
     sprintf(formatedLoc, "_texture[%d]", rObj->instanceID);
     loc = glGetUniformLocation(shaderProgram, formatedLoc);
     glUniform2f(loc, tx, ty);
-
-    //glBufferSubData(GL_ARRAY_BUFFER, rObj->instanceID * sizeof(float) * 8, sizeof(float) * 8, vertices);
 
     // Unbind everything (we will rebind it later on draw)
     glBindBuffer(GL_ARRAY_BUFFER, NULL);
@@ -276,9 +259,6 @@ REN_Draw()
         glUniformMatrix4fv(loc, 1, GL_FALSE, orthomatrix);
 
         loc = glGetUniformLocation(shaderProgram, "modelMatrix");
-        glUniformMatrix4fv(loc, 1, GL_FALSE, model);
-
-        loc = glGetUniformLocation(shaderProgram, "texCoordinates");
         glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
 		loc = glGetUniformLocation(shaderProgram, "_texture");
