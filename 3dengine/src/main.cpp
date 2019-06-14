@@ -7,7 +7,6 @@ is easy enough to make a macro that will not log at runtime (make a verbose flag
 
 #include "Engine.h"
 #include "stb_image/stb_image.h"
-#include "stb_vorbis/stb_vorbis.c"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -28,6 +27,15 @@ void callback(int state)
 //TODO MUSIC STREAMING
 #include "FileSystem.h"
 #include "Memory.h"
+#include "stb_vorbis/stb_vorbis.c"
+#include "miniaudio/miniaudio.h"
+
+#define AS_FORMAT_OGG 0
+
+#define AS_OUTPUT_FORMAT       ma_format_f32
+#define AS_OUTPUT_CHANNELS     2
+#define AS_OUTPUT_SAMPLE_RATE  44100
+
 typedef struct SSoundWave {
     uint32 sampleCount;     // Number of samples
     uint32 sampleRate;      // Frequency
@@ -35,6 +43,13 @@ typedef struct SSoundWave {
     uint32 channels;        // Number of channels - 1: mono, 2: stereo
     void *data;             // Data pointer
 } SoundWave;
+
+typedef struct SSound {
+	void *audioBuffer;      // Audio buffer
+	uint32 source;    // Audio source id
+	uint32 buffer;    // Audio buffer id
+	int format;             // Audio format
+} Sound;
 
 SoundWave LoadOgg(const char* fileName)
 {
@@ -63,11 +78,48 @@ SoundWave LoadOgg(const char* fileName)
         // Although we opened the file, we want vorbis to close it 
         // for deinitialization reasons
         stb_vorbis_close(oggFile);
-        return wave;
     }
 
+	return wave;
+}
 
-}   
+void UnloadWave(SoundWave wave)
+{
+	if (wave.data != NULL)
+		MEM_Release(wave.data);
+}
+
+Sound LoadSound(const char* fileName, uint32 format)
+{
+	SoundWave wave;
+
+	switch (format)
+	{
+	case AS_FORMAT_OGG:
+		wave = LoadOgg(fileName);
+	}
+
+	Sound sound;
+	if (wave.data != NULL)
+	{
+		if (wave.sampleSize == 16)
+		{
+			ma_format format = ma_format_s16;
+			uint32 frameCount = wave.sampleCount / wave.channels;
+
+			uint32 frameCountOut = ma_convert_frames(NULL, AS_OUTPUT_FORMAT, AS_OUTPUT_CHANNELS, AS_OUTPUT_SAMPLE_RATE, NULL, format, wave.channels, wave.sampleRate, frameCount);
+
+		}
+		else
+		{
+			//TODO erro or assert : only supports 16bits for now
+		}
+	}
+
+	UnloadWave(wave);
+
+	return sound;
+}
 
 
 
