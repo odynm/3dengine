@@ -8,8 +8,9 @@
 #include "SystemTypes/String.h"
 
 String* FS_ReadContent(const char* path);
+FILE * FS_ReadFile(const char* path);
+FILE * FS_OpenFile(const char* path, const char* mode);
 
 internal uint64 GetFileSize(FILE* file);
-internal FILE * OpenFile(const char* path, const char* mode);
 
 #endif

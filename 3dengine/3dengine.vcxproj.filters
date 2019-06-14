@@ -25,6 +25,9 @@
     <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp">
       <Filter>Dependencies\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\code\miniaudio\miniaudio.c">
+      <Filter>Dependencies\miniaudio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -66,6 +69,9 @@
     </Filter>
     <Filter Include="Dependencies\stb_image">
       <UniqueIdentifier>{5718818f-3d39-4f9b-acc1-045b68c66c18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\miniaudio">
+      <UniqueIdentifier>{3c862d07-5e01-4a6c-a527-e281f8dd381e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,8 @@
  Can be further improved with string builders and concat
 */
 
+//TODO: string slices
+
 #include <stdlib.h>
 #include <string.h>
 

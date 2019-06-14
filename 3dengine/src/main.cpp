@@ -1,7 +1,12 @@
+//TODO logging:
+/*
+in order to know what the f is happening on execution time, use a log function
+put it all over the place, not just errors
+is easy enough to make a macro that will not log at runtime (make a verbose flag, maybe)
+*/
+
 #include "Engine.h"
 #include "stb_image/stb_image.h"
-#include "OpenAL/al.h"
-#include "OpenAL/alc.h"
 #include "stb_vorbis/stb_vorbis.c"
 
 #define WIDTH 800
@@ -11,15 +16,6 @@
 int width, height, nrChannels;
 byte *texture = stbi_load("data/duck_shades.png", &width, &height, &nrChannels, STBI_rgb_alpha);
 
-ALCdevice* device;
-ALCcontext* context;
-
-ALuint audioSource;
-ALuint audioBuffer;
-
-stb_vorbis* vBuffer;
-stb_vorbis_info vInfo;
-
 const size_t bufferSize = 192644;
 
 void callback(int state)
@@ -27,38 +23,57 @@ void callback(int state)
     printf("%d\n", state);
 }
 
+
+
+//TODO MUSIC STREAMING
+#include "FileSystem.h"
+#include "Memory.h"
+typedef struct SSoundWave {
+    uint32 sampleCount;     // Number of samples
+    uint32 sampleRate;      // Frequency
+    uint32 sampleSize;      // Bits per sample: 8, 16, 32 (currently locked 16bit)
+    uint32 channels;        // Number of channels - 1: mono, 2: stereo
+    void *data;             // Data pointer
+} SoundWave;
+
+SoundWave LoadOgg(const char* fileName)
+{
+    SoundWave wave = {};
+
+    FILE* file = FS_ReadFile("sample.ogg");
+    //TODO we can pass an allocation buffer to stb_vorbis_open_file. See if needed
+    stb_vorbis *oggFile = stb_vorbis_open_file(file, false, NULL, NULL);
+
+    if (oggFile == NULL) 
+    {
+        //TODO: log error
+    }
+
+    else
+    {
+        stb_vorbis_info info = stb_vorbis_get_info(oggFile);
+        wave.sampleRate = info.sample_rate;
+        wave.sampleSize = 16;   //locked 16 bit sample size
+        wave.channels = info.channels;
+        wave.sampleCount = stb_vorbis_stream_length_in_samples(oggFile)*info.channels;
+        wave.data = (int16*)MEM_Alloc(wave.sampleCount * sizeof(int16)); //TODO we may need to multiply by channels too (i dont know why)
+
+        stb_vorbis_get_samples_short_interleaved(oggFile, wave.channels, (int16*)wave.data, wave.sampleCount);//TODO we may need to multiply sample count by channels too
+
+        // Although we opened the file, we want vorbis to close it 
+        // for deinitialization reasons
+        stb_vorbis_close(oggFile);
+        return wave;
+    }
+
+
+}   
+
+
+
+
 int main()
 {
-    device = alcOpenDevice(NULL);
-    context = alcCreateContext(device, NULL);
-    alcMakeContextCurrent(context);
-
-    alGenSources((ALuint)1, &audioSource);
-    alSourcef(audioSource, AL_PITCH, 1);
-    alSourcef(audioSource, AL_GAIN, 1);
-    alSource3f(audioSource, AL_POSITION, 0, 0, 0);
-    alSource3f(audioSource, AL_VELOCITY, 0, 0, 0);
-    alSourcei(audioSource, AL_LOOPING, AL_FALSE);
-
-    alGenBuffers((ALuint)1, &audioBuffer);
-
-    char filename[] = "data/sample.ogg";
-    vBuffer = stb_vorbis_open_filename(filename, NULL, NULL);
-    vInfo = stb_vorbis_get_info(vBuffer);
-    ALenum format;
-    if (vInfo.channels == 2) format = AL_FORMAT_STEREO16;
-    else format = AL_FORMAT_MONO16;
-    ALshort* pcm = (ALshort*)MEM_Alloc(bufferSize);
-    ALshort* pcm2 = (ALshort*)MEM_Alloc(bufferSize);
-
-    stb_vorbis_get_samples_short_interleaved(vBuffer, vInfo.channels, pcm, bufferSize);
-
-    alBufferData(audioBuffer, format, vBuffer, bufferSize, vInfo.sample_rate);
-
-    alSourcei(audioSource, AL_BUFFER, audioBuffer);
-
-    alSourcePlay(audioSource);
-    for (int i = 0; i < 30000000; i++);
 
     printf("%d\n", width);
 

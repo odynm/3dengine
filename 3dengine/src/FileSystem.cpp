@@ -3,7 +3,7 @@
 String*
 FS_ReadContent(const char* path)
 {
-	FILE* file = OpenFile(path, "r");
+	FILE* file = FS_OpenFile(path, "r");
 
 	if (file != NULL)
 	{
@@ -20,6 +20,28 @@ FS_ReadContent(const char* path)
 	}
 }
 
+FILE*
+FS_ReadFile(const char* path)
+{
+    FILE* file = fopen(path, "r");
+    if (file == NULL)
+    {
+        //TODO LOG ERROR
+    }
+    return file;
+}
+
+FILE*
+FS_OpenFile(const char* path, const char* mode)
+{
+    FILE* file = fopen(path, mode);
+    if (file == NULL)
+    {
+        //TODO LOG ERROR
+    }
+    return file;
+}
+
 internal
 uint64
 GetFileSize(FILE* file)
@@ -28,16 +50,4 @@ GetFileSize(FILE* file)
 	uint64 length = (uint64)ftell(file);
 	fseek(file, 0, SEEK_SET);
 	return length;
-}
-
-internal
-FILE*
-OpenFile(const char* path, const char* mode)
-{
-	FILE* file = fopen(path, mode);
-	if (file == NULL)
-	{
-		//TODO LOG ERROR
-	}
-	return file;
 }
