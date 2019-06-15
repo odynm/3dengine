@@ -25,8 +25,11 @@
     <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp">
       <Filter>Dependencies\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\code\miniaudio\miniaudio.c">
-      <Filter>Dependencies\miniaudio</Filter>
+    <ClCompile Include="..\dependencies\code\audio\dr_wav.c">
+      <Filter>Dependencies\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\code\audio\miniaudio.c">
+      <Filter>Dependencies\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +73,8 @@
     <Filter Include="Dependencies\stb_image">
       <UniqueIdentifier>{5718818f-3d39-4f9b-acc1-045b68c66c18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\miniaudio">
-      <UniqueIdentifier>{3c862d07-5e01-4a6c-a527-e281f8dd381e}</UniqueIdentifier>
+    <Filter Include="Dependencies\audio">
+      <UniqueIdentifier>{88faa66e-f456-4635-ab45-8ae5f4140124}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

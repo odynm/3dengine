@@ -23,7 +23,7 @@ machinery
 */
 
 //TODO would it be possible to not use buffer data at all? or to reuse
-//the same in all objects. because it will not change between objects, if 
+//the same in all objects. because it will not change between objects, if
 //everything works as expected - everything will be done with shader parameters
 
 uint shaderProgram;
@@ -130,7 +130,7 @@ REN_Init()
     // The index is the index os the attrib pointer inside the VAO
     // You can have for example one attrib pointer for positions and one for colors
     int indexAttribPos = 0;
-	int indexAttribTex = 1;
+    int indexAttribTex = 1;
     //form
     glVertexAttribPointer(indexAttribPos, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     //tex coord
@@ -138,7 +138,7 @@ REN_Init()
 
     // Tell OpenGL to use this array as vertex attrib
     glEnableVertexAttribArray(indexAttribPos);
-	glEnableVertexAttribArray(indexAttribTex);
+    glEnableVertexAttribArray(indexAttribTex);
 
     // Texture alpha blend
     glEnable(GL_BLEND);
@@ -151,10 +151,10 @@ void
 REN_AddTexture(byte* textureBuffer, int width, int height)
 {
     glGenTextures(1, &texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureBuffer);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -164,7 +164,7 @@ REN_AddTexture(byte* textureBuffer, int width, int height)
 void
 REN_AddSprite(int layer, float x, float y, float w, float h, float tx, float ty)
 {
-    Assert(layer >= NUMBER_OF_LAYERS);
+    Assert((layer < NUMBER_OF_LAYERS));
 
     RenderingObject* rObj = REN_GetAvailableRenderingObject(layers, layer);
 
@@ -261,8 +261,8 @@ REN_Draw()
         loc = glGetUniformLocation(shaderProgram, "modelMatrix");
         glUniformMatrix4fv(loc, 1, GL_FALSE, model);
 
-		loc = glGetUniformLocation(shaderProgram, "_texture");
-		glUniform1i(loc, texture);
+        loc = glGetUniformLocation(shaderProgram, "_texture");
+        glUniform1i(loc, texture);
 
         for (int iinstance = 0; iinstance < layers[ilayer]->lastSlot; iinstance++)
         {

@@ -85,7 +85,7 @@
     <Link>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\x86\glfw3.lib;$(SolutionDir)\dependencies\lib\OpenAL\Win32\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\x86\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,7 +99,7 @@
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\x64\glfw3.lib;$(SolutionDir)\dependencies\lib\OpenAL\Win64\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\dependencies\lib\glfw\x64\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -157,8 +157,9 @@
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\code\audio\dr_wav.c" />
+    <ClCompile Include="..\dependencies\code\audio\miniaudio.c" />
     <ClCompile Include="..\dependencies\code\glad\glad.c" />
-    <ClCompile Include="..\dependencies\code\miniaudio\miniaudio.c" />
     <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
