@@ -17,6 +17,7 @@
 #include "Log.h"
 #include "Time.h"
 #include "Window.h"
+#include "Audio.h"
 
 void ENG_Init();
 void ENG_Tick();

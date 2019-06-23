@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\FileSystem.h" />
     <ClInclude Include="src\Graphics\Renderer.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="..\dependencies\code\audio\miniaudio.c" />
     <ClCompile Include="..\dependencies\code\glad\glad.c" />
     <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp" />
+    <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\FileSystem.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />

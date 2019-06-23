@@ -31,6 +31,7 @@
     <ClCompile Include="..\dependencies\code\audio\miniaudio.c">
       <Filter>Dependencies\audio</Filter>
     </ClCompile>
+    <ClCompile Include="src\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />
@@ -53,6 +54,7 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\Audio.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SystemTypes">
