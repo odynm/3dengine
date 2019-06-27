@@ -2,7 +2,7 @@
 #define AUDIO_H
 
 #include <stdlib.h>
-#include "audio\stb_vorbis.c"
+#include "audio\stb_vorbis.h"
 #include "audio\miniaudio.h"
 
 #include "SystemTypes\Typedefs.h"
@@ -56,17 +56,17 @@ typedef struct rAudioBuffer {
 } AudioBuffer;
 
 typedef struct SSoundWave {
-    uint32 sampleCount;                       // Number of samples
-    uint32 sampleRate;                        // Frequency
-    uint32 sampleSize;                        // Bits per sample: 8, 16, 32 (currently locked 16bit)
-    uint32 channels;                          // Number of channels - 1: mono, 2: stereo
+    uint sampleCount;                       // Number of samples
+	uint sampleRate;                        // Frequency
+	uint sampleSize;                        // Bits per sample: 8, 16, 32 (currently locked 16bit)
+	uint channels;                          // Number of channels - 1: mono, 2: stereo
     void *data;                               // Data pointer
 } SoundWave;
 
 typedef struct SSound {
     int format;                               // Audio format
-    uint32 source;                            // Audio source id
-    uint32 buffer;                            // Audio buffer id
+	uint source;                            // Audio source id
+	uint buffer;                            // Audio buffer id
     AudioBuffer* audioBuffer;                 // Audio buffer
 } Sound;
 
@@ -78,7 +78,7 @@ SoundWave AUD_LoadOggWave(const char* fileName);
 void AUD_UnloadWave(SoundWave wave);
 Sound AUD_LoadSound(const char* fileName, EAudioFormat format);
 void AUD_PlaySound(Sound sound);
-AudioBuffer* AUD_CreateAudioBuffer(ma_format format, uint32 channels, uint32 sampleRate, uint32 bufferSizeInFrames, EAudioMode mode);
+AudioBuffer* AUD_CreateAudioBuffer(ma_format format, uint channels, uint sampleRate, uint bufferSizeInFrames, EAudioMode mode);
 void AUD_PlayAudioBuffer(AudioBuffer* audioBuffer);
 void AUD_StopAudioBuffer(AudioBuffer *audioBuffer);
 

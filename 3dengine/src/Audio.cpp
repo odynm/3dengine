@@ -102,15 +102,15 @@ AUD_LoadSound(const char* fileName, EAudioFormat format)
         if (wave.sampleSize == 16)
         {
             ma_format format = ma_format_s16;
-            uint32 frameCount = wave.sampleCount / wave.channels;
+			uint frameCount = wave.sampleCount / wave.channels;
 
-            uint32 frameCountOut = ma_convert_frames(
+			uint frameCountOut = ma_convert_frames(
                 NULL, AS_OUTPUT_FORMAT, AS_OUTPUT_CHANNELS, AS_OUTPUT_SAMPLE_RATE, NULL, format, wave.channels, wave.sampleRate, frameCount);
 
             AudioBuffer* audioBuffer = AUD_CreateAudioBuffer(
                 AS_OUTPUT_FORMAT, AS_OUTPUT_CHANNELS, AS_OUTPUT_SAMPLE_RATE, frameCountOut, EAudioMode::STATIC);
 
-            frameCount = (uint32)ma_convert_frames(
+            frameCount = (uint)ma_convert_frames(
                 audioBuffer->buffer,
                 audioBuffer->rawPcm.formatConverterIn.config.formatIn,
                 audioBuffer->rawPcm.formatConverterIn.config.channels,
@@ -145,7 +145,7 @@ AUD_PlaySound(Sound sound)
 }
 
 AudioBuffer*
-AUD_CreateAudioBuffer(ma_format format, uint32 channels, uint32 sampleRate, uint32 bufferSizeInFrames, EAudioMode mode)
+AUD_CreateAudioBuffer(ma_format format, uint channels, uint sampleRate, uint bufferSizeInFrames, EAudioMode mode)
 {
     //AudioBuffer* audioBuffer = (AudioBuffer*)MEM_Alloc(sizeof(AudioBuffer));
     //audioBuffer->buffer = (byte*)MEM_Alloc(bufferSizeInFrames*channels*ma_get_bytes_per_sample(format));

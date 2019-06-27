@@ -32,6 +32,9 @@
       <Filter>Dependencies\audio</Filter>
     </ClCompile>
     <ClCompile Include="src\Audio.cpp" />
+    <ClCompile Include="..\dependencies\code\audio\stb_vorbis.c">
+      <Filter>Dependencies\audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine.h" />

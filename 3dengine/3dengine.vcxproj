@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="..\dependencies\code\audio\dr_wav.c" />
     <ClCompile Include="..\dependencies\code\audio\miniaudio.c" />
+    <ClCompile Include="..\dependencies\code\audio\stb_vorbis.c" />
     <ClCompile Include="..\dependencies\code\glad\glad.c" />
     <ClCompile Include="..\dependencies\code\stb_image\stb_image_impl.cpp" />
     <ClCompile Include="src\Audio.cpp" />
