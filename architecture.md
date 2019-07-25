@@ -9,7 +9,7 @@ Main systems who made the core of the engine are all singletons / static. The en
 The components make a different part of the engine and are not static. Those can be instanced and used through the code, and probably need to be imported separately together with the system they'll eventually use.
 
 ## Philosophy
-This is intended to be a graphics api that could scale. For simplicity, it will start as classical OOP design instead of a data-driven that I would like.
+This is intended to be a graphics api that could scale.
 
-## Lib
-Std lib will be used extensively.
+## Libs
+Std lib will be used extensively, at least at the start. As for third-party libs, cross-platforms ones will be prioritized, although the primary objective is Windows only.

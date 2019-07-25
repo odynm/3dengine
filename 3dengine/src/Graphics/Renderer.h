@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 /*
-(Un)Supported features:
+Supported features and info:
 * size is fixed
 * only supported quads for sprite rendering
 * dynamic position and texture coord

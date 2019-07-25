@@ -68,17 +68,17 @@ typedef struct SSound {
 internal ma_context gAudioContext;
 internal ma_device gAudioDevice;
 
-void            AUD_InitAudioDevice();
-SoundWave       AUD_LoadOggWave(const char* fileName);
-void            AUD_UnloadWave(SoundWave wave);
-Sound           AUD_LoadSound(const char* fileName, EAudioFormat format);
-void            AUD_PlaySound(Sound sound);
-AudioBuffer*    AUD_CreateAudioBuffer(ma_format format, uint channels, uint sampleRate, uint bufferSizeInFrames, EAudioMode mode);
-void            AUD_PlayAudioBuffer(AudioBuffer* audioBuffer);
-void            AUD_StopAudioBuffer(AudioBuffer *audioBuffer);
+void AUD_InitAudioDevice();
+SoundWave AUD_LoadOggWave(const char* fileName);
+void AUD_UnloadWave(SoundWave wave);
+Sound AUD_LoadSound(const char* fileName, EAudioFormat format);
+void AUD_PlaySound(Sound sound);
+AudioBuffer* AUD_CreateAudioBuffer(ma_format format, uint channels, uint sampleRate, uint bufferSizeInFrames, EAudioMode mode);
+void AUD_PlayAudioBuffer(AudioBuffer* audioBuffer);
+void AUD_StopAudioBuffer(AudioBuffer *audioBuffer);
 
-internal void           MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, float localVolume);
-internal void           OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, ma_uint32 frameCount);
-internal ma_uint32      OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount, void *pUserData);
+internal void MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, float localVolume);
+internal void OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, ma_uint32 frameCount);
+internal ma_uint32 OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount, void *pUserData);
 
 #endif
