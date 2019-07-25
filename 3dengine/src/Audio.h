@@ -45,7 +45,7 @@ typedef struct SAudioBuffer {
     bool isLooping;
     bool isPaused;
     bool isPlaying;
-    bool isProcessed[2];                    // Seems like it's good reason to double check because of threading issues
+    bool isProcessed[2];                    // Seems like it's good to double check because of threading issues
     float pitch;
     float volume;
 } AudioBuffer;

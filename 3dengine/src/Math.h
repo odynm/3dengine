@@ -12,10 +12,10 @@ typedef struct SVector2 {
 
 typedef struct SVector3 {
     float x, y, z;
-} Vector2;
+} Vector3;
 
 typedef struct SVector4 {
     float x, y, z, w;
-} Vector2;
+} Vector4;
 
 #endif

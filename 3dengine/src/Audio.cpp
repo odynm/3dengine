@@ -235,7 +235,7 @@ MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, fl
 }
 
 // This is where we recieve a callback from sending data to the audio device
-static void
+internal void
 OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, ma_uint32 frameCount)
 {
     // Init the output buffer to 0
