@@ -17,3 +17,9 @@ MEM_Release(void* address)
 {
     free(address);
 }
+
+void*
+MEM_Set(void* address, int value, uint size)
+{
+	return memset(address, value, size);
+}

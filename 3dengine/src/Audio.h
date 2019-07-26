@@ -37,8 +37,8 @@ enum class EAudioMode {
 typedef struct SAudioBuffer {
     ma_pcm_converter rawPcm;
     byte* buffer;
-    SAudioBuffer* next;
-    SAudioBuffer* prev;
+    SAudioBuffer* next;						// Next on chain
+    SAudioBuffer* prev;						// Previous on chain
     EAudioMode playMode;
     uint bufferSizeInFrames;
     uint frameCursor;
@@ -67,6 +67,7 @@ typedef struct SSound {
 
 internal ma_context gAudioContext;
 internal ma_device gAudioDevice;
+internal ma_mutex audioLock;
 
 void AUD_InitAudioDevice();
 SoundWave AUD_LoadOggWave(const char* fileName);

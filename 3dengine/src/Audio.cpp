@@ -236,54 +236,54 @@ MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, fl
 
 // This is where we recieve a callback from sending data to the audio device
 internal void
-OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, ma_uint32 frameCount)
+OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesIn, ma_uint32 frameCount)
 {
+	Assert(pDevice);
+
     // Init the output buffer to 0
     memset(pFramesOut, 0, frameCount*pDevice->playback.channels*ma_get_bytes_per_sample(pDevice->playback.format));
 
-    // Using a mutex here for thread-safety which makes things not real-time. This is unlikely to be necessary for this project, but may
-    // want to consider how you might want to avoid this
+    // Locking this for thread-safety which makes things NOT real-time. Don't know yet how to avoid this - or if we need to do so
+	ma_mutex_lock(&audioLock);
     {
+		//TODO linked chain
         for (AudioBuffer *audioBuffer = firstAudioBuffer; audioBuffer != NULL; audioBuffer = audioBuffer->next)
         {
-            // Ignore stopped or paused sounds
             if (!audioBuffer->isPlaying || audioBuffer->isPaused) continue;
 
             ma_uint32 framesRead = 0;
-            for (;;)
+            while (true)
             {
-                if (framesRead > frameCount)
-                {
-                    break;
-                }
+                if (framesRead >= frameCount) break;
 
-                if (framesRead == frameCount) break;
-
-                // Just read as much data as we can from the stream
+                // We will read as much data as possible from the input stream
                 ma_uint32 framesToRead = (frameCount - framesRead);
                 while (framesToRead > 0)
                 {
-                    float tempBuffer[1024]; // 512 frames for stereo
+                    float tempBuffer[1024]; // 512 for stereo
 
-                    ma_uint32 framesToReadRightNow = framesToRead;
-                    if (framesToReadRightNow > sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS)
+                    ma_uint32 framesToReadNow = framesToRead;
+
+					// If the buffer is not big enough, read as much as possible
+                    if (framesToReadNow > sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS)
                     {
-                        framesToReadRightNow = sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS;
+                        framesToReadNow = sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS;
                     }
 
-                    ma_uint32 framesJustRead = (ma_uint32)ma_pcm_converter_read(&audioBuffer->rawPcm, tempBuffer, framesToReadRightNow);
-                    if (framesJustRead > 0)
+                    ma_uint32 framesJustReaded = (ma_uint32)ma_pcm_converter_read(&audioBuffer->rawPcm, tempBuffer, framesToReadNow);
+
+                    if (framesJustReaded > 0)
                     {
-                        float *framesOut = (float *)pFramesOut + (framesRead*gAudioDevice.playback.channels);
+                        float *framesOut = (float*)pFramesOut + (framesRead*gAudioDevice.playback.channels); // Go to the next still available space on out buffer
                         float *framesIn = tempBuffer;
-                        MixAudioFrames(framesOut, framesIn, framesJustRead, audioBuffer->volume);
+                        MixAudioFrames(framesOut, framesIn, framesJustReaded, audioBuffer->volume);
 
-                        framesToRead -= framesJustRead;
-                        framesRead += framesJustRead;
+                        framesToRead -= framesJustReaded;
+                        framesRead += framesJustReaded;
                     }
 
-                    // If we weren't able to read all the frames we requested, break
-                    if (framesJustRead < framesToReadRightNow)
+                    // If we can't complete the read, we are probably done
+                    if (framesJustReaded < framesToReadNow)
                     {
                         if (!audioBuffer->isLooping)
                         {
@@ -292,22 +292,23 @@ OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInp
                         }
                         else
                         {
-                            // Should never get here, but just for safety,
-                            // move the cursor position back to the start and continue the loop
+                            // If we ARE looping and done, something went wrong. Reset the cursor and keep going
                             audioBuffer->frameCursor = 0;
                             continue;
                         }
                     }
                 }
 
-                // If for some reason we weren't able to read every frame we'll need to break from the loop.
-                // Not doing this could theoretically put us into an infinite loop.
+                // If we don't read anything, break off
                 if (framesToRead > 0) break;
             }
         }
+
+		ma_mutex_unlock(&audioLock);
     }
 }
 
+// TODO review this now
 static ma_uint32
 OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount, void *pUserData)
 {
