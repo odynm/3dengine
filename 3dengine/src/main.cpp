@@ -34,7 +34,9 @@ int main()
 {
     AUD_InitAudioDevice();
     Sound s = AUD_LoadSound("data/sample.ogg", EAudioFormat::OGG);
+    //Sound m = AUD_LoadSound("data/sample.ogg", EAudioFormat::OGG);
     AUD_PlaySound(s);
+    //AUD_PlaySound(m);
 
     printf("%d\n", width);
 

@@ -45,29 +45,29 @@ typedef struct SAudioBuffer {
     bool isLooping;
     bool isPaused;
     bool isPlaying;
-    bool isProcessed[2];                    // Seems like it's good to double check because of threading issues
+    bool isProcessed[2];                    // We divide our buffer in two sub buffers
     float pitch;
     float volume;
 } AudioBuffer;
 
 typedef struct SSoundWave {
     uint sampleCount;                       // Number of samples
-	uint sampleRate;                        // Frequency
-	uint sampleSize;                        // Bits per sample: 8, 16, 32 (currently locked 16bit)
-	uint channels;                          // Number of channels - 1: mono, 2: stereo
+    uint sampleRate;                        // Frequency
+    uint sampleSize;                        // Bits per sample: 8, 16, 32 (currently locked 16bit)
+    uint channels;                          // Number of channels - 1: mono, 2: stereo
     void *data;                             // Data pointer
 } SoundWave;
 
 typedef struct SSound {
     int format;                             // Audio format
-	uint source;                            // Audio source id
-	uint buffer;                            // Audio buffer id
+    uint source;                            // Audio source id
+    uint buffer;                            // Audio buffer id
     AudioBuffer* audioBuffer;               // Audio buffer
 } Sound;
 
 internal ma_context gAudioContext;
 internal ma_device gAudioDevice;
-internal ma_mutex audioLock;
+internal ma_mutex gAudioLock;
 
 void AUD_InitAudioDevice();
 SoundWave AUD_LoadOggWave(const char* fileName);
@@ -78,8 +78,8 @@ AudioBuffer* AUD_CreateAudioBuffer(ma_format format, uint channels, uint sampleR
 void AUD_PlayAudioBuffer(AudioBuffer* audioBuffer);
 void AUD_StopAudioBuffer(AudioBuffer *audioBuffer);
 
-internal void MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, float localVolume);
-internal void OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, ma_uint32 frameCount);
-internal ma_uint32 OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount, void *pUserData);
+internal void MixAudioFrames(float *framesOut, const float *framesIn, uint frameCount, float localVolume);
+internal void OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesInput, uint frameCount);
+internal uint OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, uint frameCount, void *pUserData);
 
 #endif

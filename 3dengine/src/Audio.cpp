@@ -71,7 +71,7 @@ AUD_LoadOggWave(const char* fileName)
         wave.data = (int16*)MEM_Alloc(wave.sampleCount * sizeof(int16)); //TODO we may need to multiply by channels too (i dont know why)
 
         stb_vorbis_get_samples_short_interleaved(oggFile, wave.channels, (int16*)wave.data, wave.sampleCount);//TODO we may need to multiply sample count by channels too
-        
+
         stb_vorbis_close(oggFile);
     }
 
@@ -92,8 +92,8 @@ AUD_LoadSound(const char* fileName, EAudioFormat format)
 
     switch (format)
     {
-        case EAudioFormat::OGG:
-            wave = AUD_LoadOggWave(fileName);
+    case EAudioFormat::OGG:
+        wave = AUD_LoadOggWave(fileName);
     }
 
     Sound sound = {};
@@ -102,9 +102,9 @@ AUD_LoadSound(const char* fileName, EAudioFormat format)
         if (wave.sampleSize == 16)
         {
             ma_format format = ma_format_s16;
-			uint frameCount = wave.sampleCount / wave.channels;
+            uint frameCount = wave.sampleCount / wave.channels;
 
-			uint frameCountOut = ma_convert_frames(
+            uint frameCountOut = ma_convert_frames(
                 NULL, AS_OUTPUT_FORMAT, AS_OUTPUT_CHANNELS, AS_OUTPUT_SAMPLE_RATE, NULL, format, wave.channels, wave.sampleRate, frameCount);
 
             // Create buffer
@@ -218,11 +218,11 @@ AUD_StopAudioBuffer(AudioBuffer *audioBuffer)
 
 // This is where we can mix the sound, but we'll not do anything special
 internal void
-MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, float volume)
+MixAudioFrames(float *framesOut, const float *framesIn, uint frameCount, float volume)
 {
-    for (ma_uint32 iFrame = 0; iFrame < frameCount; ++iFrame)
+    for (uint iFrame = 0; iFrame < frameCount; ++iFrame)
     {
-        for (ma_uint32 iChannel = 0; iChannel < gAudioDevice.playback.channels; ++iChannel)
+        for (uint iChannel = 0; iChannel < gAudioDevice.playback.channels; ++iChannel)
         {
             // Increment pointers...
             float *frameOut = framesOut + (iFrame*gAudioDevice.playback.channels);
@@ -236,41 +236,41 @@ MixAudioFrames(float *framesOut, const float *framesIn, ma_uint32 frameCount, fl
 
 // This is where we recieve a callback from sending data to the audio device
 internal void
-OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesIn, ma_uint32 frameCount)
+OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesIn, uint frameCount)
 {
-	Assert(pDevice);
+    Assert(pDevice);
 
     // Init the output buffer to 0
     memset(pFramesOut, 0, frameCount*pDevice->playback.channels*ma_get_bytes_per_sample(pDevice->playback.format));
 
     // Locking this for thread-safety which makes things NOT real-time. Don't know yet how to avoid this - or if we need to do so
-	ma_mutex_lock(&audioLock);
+    ma_mutex_lock(&gAudioLock);
     {
-		//TODO linked chain
+        //TODO linked chain
         for (AudioBuffer *audioBuffer = firstAudioBuffer; audioBuffer != NULL; audioBuffer = audioBuffer->next)
         {
             if (!audioBuffer->isPlaying || audioBuffer->isPaused) continue;
 
-            ma_uint32 framesRead = 0;
+            uint framesRead = 0;
             while (true)
             {
                 if (framesRead >= frameCount) break;
 
                 // We will read as much data as possible from the input stream
-                ma_uint32 framesToRead = (frameCount - framesRead);
+                uint framesToRead = (frameCount - framesRead);
                 while (framesToRead > 0)
                 {
                     float tempBuffer[1024]; // 512 for stereo
 
-                    ma_uint32 framesToReadNow = framesToRead;
+                    uint framesToReadNow = framesToRead;
 
-					// If the buffer is not big enough, read as much as possible
+                    // If the buffer is not big enough, read as much as possible
                     if (framesToReadNow > sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS)
                     {
                         framesToReadNow = sizeof(tempBuffer) / sizeof(tempBuffer[0]) / AS_OUTPUT_CHANNELS;
                     }
 
-                    ma_uint32 framesJustReaded = (ma_uint32)ma_pcm_converter_read(&audioBuffer->rawPcm, tempBuffer, framesToReadNow);
+                    uint framesJustReaded = (uint)ma_pcm_converter_read(&audioBuffer->rawPcm, tempBuffer, framesToReadNow);
 
                     if (framesJustReaded > 0)
                     {
@@ -304,76 +304,82 @@ OnSendAudioToDevice(ma_device *pDevice, void *pFramesOut, const void *pFramesIn,
             }
         }
 
-		ma_mutex_unlock(&audioLock);
+        ma_mutex_unlock(&gAudioLock);
     }
 }
 
-// TODO review this now
-static ma_uint32
-OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount, void *pUserData)
+// Called when the audio buffer is read
+// Here we make a distintion between STREAM and STATIC playing
+internal uint
+OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, uint frameCount, void *pUserData)
 {
+    // The audio buffer was stored on the userData pointer
     AudioBuffer *audioBuffer = (AudioBuffer *)pUserData;
 
-    ma_uint32 subBufferSizeInFrames = (audioBuffer->bufferSizeInFrames > 1) ? audioBuffer->bufferSizeInFrames / 2 : audioBuffer->bufferSizeInFrames;
-    ma_uint32 currentSubBufferIndex = audioBuffer->frameCursor / subBufferSizeInFrames;
+    // Take the position of the frame cursor to fit inside the sub buffer
+    // A sub buffer has half the size of the buffer (a processed and a unprocessed - index 0 and 1)
+    uint subBufferSizeInFrames = (audioBuffer->bufferSizeInFrames > 1) ?
+        audioBuffer->bufferSizeInFrames / 2 : audioBuffer->bufferSizeInFrames;
+    uint currentSubBufferIndex = audioBuffer->frameCursor / subBufferSizeInFrames;
 
     if (currentSubBufferIndex > 1)
     {
-        //TODO log
+        //TODO log - sub buffer index is outside the sub buffer size
     }
 
-    // Another thread can update the processed state of buffers so we just take a copy here to try and avoid potential synchronization problems.
+    // Sub buffers processed flags - we take a copy to avoid sync problems
     bool isSubBufferProcessed[2];
     isSubBufferProcessed[0] = audioBuffer->isProcessed[0];
     isSubBufferProcessed[1] = audioBuffer->isProcessed[1];
 
-    ma_uint32 frameSizeInBytes = ma_get_bytes_per_sample(audioBuffer->rawPcm.formatConverterIn.config.formatIn)*audioBuffer->rawPcm.formatConverterIn.config.channels;
+    uint frameSizeInBytes = ma_get_bytes_per_sample(audioBuffer->rawPcm.formatConverterIn.config.formatIn)*audioBuffer->rawPcm.formatConverterIn.config.channels;
 
-    // Fill out every frame until we find a buffer that's marked as processed. Then fill the remainder with 0.
-    ma_uint32 framesRead = 0;
-    for (;;)
+    // Fill all frames until we find a processed buffer
+    uint framesRead = 0;
+    while (true)
     {
-        // We break from this loop differently depending on the buffer's usage. For static buffers, we simply fill as much data as we can. For
-        // streaming buffers we only fill the halves of the buffer that are processed. Unprocessed halves must keep their audio data in-tact
         if (audioBuffer->playMode == EAudioMode::STATIC)
-        {
+        {   // If STATIC, we fill as much of the buffer as we can
             if (framesRead >= frameCount) break;
         }
         else
-        {
+        {   // If STREAM, we fill only the half of the buffer that's processed. The unprocessed we don't touch
             if (isSubBufferProcessed[currentSubBufferIndex]) break;
         }
 
-        ma_uint32 totalFramesRemaining = (frameCount - framesRead);
+        // Check if we are done reading the frames
+        uint totalFramesRemaining = (frameCount - framesRead);
         if (totalFramesRemaining == 0) break;
 
-        ma_uint32 framesRemainingInOutputBuffer;
+        uint framesRemainingInOutputBuffer;
         if (audioBuffer->playMode == EAudioMode::STATIC)
-        {
+        {   // If STATIC, how much until we reach the end of the buffer with the frame cursor
             framesRemainingInOutputBuffer = audioBuffer->bufferSizeInFrames - audioBuffer->frameCursor;
         }
         else
-        {
-            ma_uint32 firstFrameIndexOfThisSubBuffer = subBufferSizeInFrames * currentSubBufferIndex;
+        {   //If STREAM, where we are at this sub buffer - and how much until the frame cursor reach the end
+            uint firstFrameIndexOfThisSubBuffer = subBufferSizeInFrames * currentSubBufferIndex;
             framesRemainingInOutputBuffer = subBufferSizeInFrames - (audioBuffer->frameCursor - firstFrameIndexOfThisSubBuffer);
         }
 
-        ma_uint32 framesToRead = totalFramesRemaining;
+        // Cap the number of frames to read to the remaining space on the output buffer
+        uint framesToRead = totalFramesRemaining;
         if (framesToRead > framesRemainingInOutputBuffer) framesToRead = framesRemainingInOutputBuffer;
 
-        memcpy((unsigned char *)pFramesOut + (framesRead*frameSizeInBytes), audioBuffer->buffer + (audioBuffer->frameCursor*frameSizeInBytes), framesToRead*frameSizeInBytes);
+        memcpy((byte*)pFramesOut + (framesRead*frameSizeInBytes), audioBuffer->buffer + (audioBuffer->frameCursor*frameSizeInBytes), framesToRead*frameSizeInBytes);
         audioBuffer->frameCursor = (audioBuffer->frameCursor + framesToRead) % audioBuffer->bufferSizeInFrames;
         framesRead += framesToRead;
 
-        // If we've read to the end of the buffer, mark it as processed
+        // If wea are at the end of the buffer, mark it as processed
         if (framesToRead == framesRemainingInOutputBuffer)
         {
+            // Again, avoiding sync issues
             audioBuffer->isProcessed[currentSubBufferIndex] = true;
             isSubBufferProcessed[currentSubBufferIndex] = true;
 
             currentSubBufferIndex = (currentSubBufferIndex + 1) % 2;
 
-            // We need to break from this loop if we're not looping
+            // If we're done and not looping, we'are done
             if (!audioBuffer->isLooping)
             {
                 AUD_StopAudioBuffer(audioBuffer);
@@ -382,16 +388,15 @@ OnAudioBufferRead(ma_pcm_converter *pDSP, void *pFramesOut, ma_uint32 frameCount
         }
     }
 
-    // Zero-fill excess
-    ma_uint32 totalFramesRemaining = (frameCount - framesRead);
+    // Fill the rest with zeros
+    uint totalFramesRemaining = (frameCount - framesRead);
     if (totalFramesRemaining > 0)
     {
         memset((unsigned char *)pFramesOut + (framesRead*frameSizeInBytes), 0, totalFramesRemaining*frameSizeInBytes);
 
-        // For static buffers we can fill the remaining frames with silence for safety, but we don't want
-        // to report those frames as "read". The reason for this is that the caller uses the return value
-        // to know whether or not a non-looping sound has finished playback
-        if (audioBuffer->playMode != EAudioMode::STATIC) framesRead += totalFramesRemaining;
+        // The silence doesn't count as sound in STATIC because we can then say that the audio has finished
+        if (audioBuffer->playMode != EAudioMode::STATIC)
+            framesRead += totalFramesRemaining;
     }
 
     return framesRead;
